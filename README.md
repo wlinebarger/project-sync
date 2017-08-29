@@ -1,6 +1,4 @@
 # project-coeur-sync
-
-# commercetools sync
 <!-- TODO [![Build Status]()
 [![codecov]()-->
 
