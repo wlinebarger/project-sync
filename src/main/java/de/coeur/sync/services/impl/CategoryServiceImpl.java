@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 import static com.commercetools.sync.commons.utils.CtpQueryUtils.queryAll;
 
-public class CategoryServiceImpl implements CategoryService{
+public class CategoryServiceImpl implements CategoryService {
     private final SphereClient sphereClient;
 
 
