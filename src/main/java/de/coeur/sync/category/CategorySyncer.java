@@ -4,15 +4,12 @@ import com.commercetools.sync.categories.CategorySync;
 import com.commercetools.sync.categories.CategorySyncOptions;
 import com.commercetools.sync.categories.CategorySyncOptionsBuilder;
 import com.commercetools.sync.commons.helpers.BaseSyncStatistics;
-import com.commercetools.sync.commons.utils.SyncUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.coeur.sync.utils.SphereClientUtils;
+import de.coeur.sync.services.CategoryService;
+import de.coeur.sync.services.impl.CategoryServiceImpl;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryDraft;
-import io.sphere.sdk.categories.expansion.CategoryExpansionModel;
-import io.sphere.sdk.categories.queries.CategoryQuery;
-import io.sphere.sdk.expansion.ExpansionPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +19,7 @@ import java.util.List;
 import static de.coeur.sync.utils.SphereClientUtils.CTP_SOURCE_CLIENT;
 import static de.coeur.sync.utils.SphereClientUtils.CTP_TARGET_CLIENT;
 import static de.coeur.sync.utils.SphereClientUtils.closeCtpClients;
+import static com.commercetools.sync.commons.utils.SyncUtils.replaceCategoriesReferenceIdsWithKeys;
 import static java.lang.String.format;
 
 public class CategorySyncer {
@@ -68,7 +66,6 @@ public class CategorySyncer {
     }
 
     /**
-     * // TODO: This only fetches one page. Need to handle to fetch all categories.
      * // TODO: Instead of reference expansion, we could cache all keys and replace references manually.
      * Fetches the {@code CTP_SOURCE_CLIENT} project categories with references expanded. Then it replaces all the
      * references with the keys and returns the reference replaced category drafts which are ready to sync.
@@ -76,14 +73,9 @@ public class CategorySyncer {
      * @return category drafts which are exactly the categories but references replaces with keys.
      */
     private static List<CategoryDraft> getSourceCategoryDraftsWithReferencesAsKeys() {
-        final List<Category> categories = CTP_SOURCE_CLIENT
-            .execute(CategoryQuery.of()
-                                  .withLimit(SphereClientUtils.QUERY_MAX_LIMIT)
-                                  .withExpansionPaths(ExpansionPath.of("custom.type"))
-                                  .plusExpansionPaths(CategoryExpansionModel::parent)
-            )
-            .toCompletableFuture().join().getResults();
-        return SyncUtils.replaceCategoriesReferenceIdsWithKeys(categories);
+        final CategoryService categoryService = new CategoryServiceImpl(CTP_SOURCE_CLIENT);
+        final List<Category> categories = categoryService.fetchAll();
+        return replaceCategoriesReferenceIdsWithKeys(categories);
     }
 
     /**

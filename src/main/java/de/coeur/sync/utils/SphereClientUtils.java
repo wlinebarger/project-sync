@@ -1,6 +1,7 @@
 package de.coeur.sync.utils;
 
 
+import com.commercetools.sync.commons.utils.ClientConfigurationUtils;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.client.SphereClientConfig;
 
@@ -17,11 +18,6 @@ public final class SphereClientUtils {
         ClientConfigurationUtils.createClient(CTP_SOURCE_CLIENT_CONFIG);
     public static final SphereClient CTP_TARGET_CLIENT =
         ClientConfigurationUtils.createClient(CTP_TARGET_CLIENT_CONFIG);
-
-    /**
-     * Max limit that can be applied to a query in CTP.
-     */
-    public static final Long QUERY_MAX_LIMIT = 500L;
 
     public static void closeCtpClients() {
         CTP_SOURCE_CLIENT.close();
