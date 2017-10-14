@@ -62,7 +62,7 @@ public class CategorySyncer {
                                                                                   .setErrorCallBack(LOGGER::error)
                                                                                   .setWarningCallBack(LOGGER::warn)
                                                                                   .build();
-        return new com.commercetools.sync.categories.CategorySync(categorySyncOptions);
+        return new CategorySync(categorySyncOptions);
     }
 
     /**
