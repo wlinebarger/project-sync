@@ -16,10 +16,10 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Nonnull;
 import java.util.List;
 
+import static com.commercetools.sync.categories.utils.CategoryReferenceReplacementUtils.replaceCategoriesReferenceIdsWithKeys;
 import static de.coeur.sync.utils.SphereClientUtils.CTP_SOURCE_CLIENT;
 import static de.coeur.sync.utils.SphereClientUtils.CTP_TARGET_CLIENT;
 import static de.coeur.sync.utils.SphereClientUtils.closeCtpClients;
-import static com.commercetools.sync.commons.utils.SyncUtils.replaceCategoriesReferenceIdsWithKeys;
 import static java.lang.String.format;
 
 public class CategorySyncer {
