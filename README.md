@@ -21,7 +21,7 @@ existing commercetools project.
  
  - install Java 8
  - a target CTP project to which your source of data would be synced to.
- - Set the following environment variables before running the application
+ - set the following environment variables before running the application
    ```bash
    export COEUR_SOURCE_PROJECT_KEY = xxxxxxxxxxxxx
    export COEUR_SOURCE_CLIENT_ID = xxxxxxxxxxxxxxx
