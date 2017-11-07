@@ -43,7 +43,7 @@ public class CategorySyncer {
                 } catch (final JsonProcessingException exception) {
                     LOGGER.error("Invalid statistics JSON string..", exception);
                 } finally {
-                    LOGGER.info(format("Categories have been synced from CTP project '%s' to project '%s'.",
+                    LOGGER.info(format("Category Syncing from CTP project '%s' to project '%s' is done.",
                         CTP_SOURCE_CLIENT.getConfig().getProjectKey(),
                         CTP_TARGET_CLIENT.getConfig().getProjectKey()));
                     closeCtpClients();
