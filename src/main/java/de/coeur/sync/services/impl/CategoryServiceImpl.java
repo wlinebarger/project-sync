@@ -24,7 +24,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> fetchAll() {
         return queryAll(sphereClient, buildCategoryQuery(), page -> page)
-                .toCompletableFuture()
-                .join().stream().flatMap(Collection::stream).collect(Collectors.toList());
+            .thenApply(this::flattenCategoryPages)
+            .toCompletableFuture()
+            .join();
+    }
+
+    private List<Category> flattenCategoryPages(@Nonnull final List<List<Category>> categoryPages) {
+        return categoryPages.stream().flatMap(Collection::stream).collect(Collectors.toList());
     }
 }
