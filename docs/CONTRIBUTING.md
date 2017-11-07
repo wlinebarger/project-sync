@@ -9,7 +9,6 @@
     - [Package JARs](#package-jars)
     - [Package JARs and run tests](#package-jars-and-run-tests)
     - [Full build with tests, but without install to maven local repo (Recommended)](#full-build-with-tests-but-without-install-to-maven-local-repo-recommended)
-    - [Install to local maven repo](#install-to-local-maven-repo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -46,13 +45,3 @@ For example, `CDL-2055: Remove redundant space.`
 ````bash
 ./gradlew clean build
 ````
-
-##### Install to local maven repo
-````bash
-./gradlew clean install
-````
-<!-- TODO
-##### Publish to Bintray
-````bash
-./gradlew clean -Dbuild.version={version} bintrayUpload
-````-->
