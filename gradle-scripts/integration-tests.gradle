@@ -10,7 +10,7 @@ sourceSets {
 }
 
 configurations {
-    integrationTestCompile.extendsFrom compile, testCompile
+    integrationTestImplementation.extendsFrom implementation, testImplementation
 }
 
 task integrationTest(type: Test) {
