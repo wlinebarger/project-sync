@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/commercetools/project-coeur-sync.svg?token=g8WsNzbMTq7LVae4BoPF&branch=master)](https://travis-ci.com/commercetools/project-coeur-sync)
 # project-coeur-sync
 <!-- TODO [![Build Status]()
 [![codecov]()-->
