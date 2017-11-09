@@ -29,28 +29,38 @@ public class CategorySyncer {
     private static CategorySync categorySync;
 
     /**
-     * Sync runner..
+     * Fetches the {@code CTP_SOURCE_CLIENT} project categories with all needed references expanded and treats category
+     * page as a batch to the sync process. Then returns a completion stage containing the sync process statistics as a
+     * result.
      *
-     * @param args all args
+     * @return completion stage containing the sync process statistics as a result.
      */
-    public static void main(final String[] args) {
+    public static CompletionStage<Void> syncCategories() {
         categorySync = setupSync();
         LOGGER.info("Starting sync..");
-        syncCategoryPages()
-            .thenAccept(categorySyncStatistics -> {
-                try {
-                    final String statisticsAsJSONString = getStatisticsAsJSONString(categorySyncStatistics);
-                    LOGGER.info(statisticsAsJSONString);
-                } catch (final JsonProcessingException exception) {
-                    LOGGER.error("Invalid statistics JSON string..", exception);
-                } finally {
-                    LOGGER.info(format("Category Syncing from CTP project '%s' to project '%s' is done.",
-                        CTP_SOURCE_CLIENT.getConfig().getProjectKey(),
-                        CTP_TARGET_CLIENT.getConfig().getProjectKey()));
-                    closeCtpClients();
-                }
-            })
-            .toCompletableFuture().join();
+        return queryAll(CTP_SOURCE_CLIENT, buildCategoryQuery(), CategorySyncer::syncCategoryPage)
+            .thenAccept(voidResult -> {
+                final CategorySyncStatistics statistics = categorySync.getStatistics();
+                logStatistics(statistics);
+                LOGGER.info(format("Category Syncing from CTP project '%s' to project '%s' is done.",
+                    CTP_SOURCE_CLIENT.getConfig().getProjectKey(),
+                    CTP_TARGET_CLIENT.getConfig().getProjectKey()));
+                closeCtpClients();
+            });
+    }
+
+    /**
+     * // TODO: Instead of reference expansion, we could cache all keys and replace references manually.
+     * Given a {@link List} representing a page of {@link Category}, this method replaces all the
+     * references with the keys and returns the reference replaced category drafts which are ready to sync. Then calls
+     * (in a blocking fashion) the sync process on these reference replaced category drafts.
+     *
+     */
+    private static void syncCategoryPage(@Nonnull final List<Category> categoryPage) {
+        final List<CategoryDraft> draftsWithKeysInReferences = replaceCategoriesReferenceIdsWithKeys(categoryPage);
+        categorySync.sync(draftsWithKeysInReferences)
+                    .toCompletableFuture()
+                    .join();
     }
 
     /**
@@ -66,30 +76,13 @@ public class CategorySyncer {
         return new CategorySync(categorySyncOptions);
     }
 
-    /**
-     * Fetches the {@code CTP_SOURCE_CLIENT} project categories with all needed references expanded and treats category
-     * page as a batch to the sync process. Then returns a completion stage containing the sync process statistics as a
-     * result.
-     *
-     * @return completion stage containing the sync process statistics as a result.
-     */
-    private static CompletionStage<CategorySyncStatistics> syncCategoryPages() {
-        return queryAll(CTP_SOURCE_CLIENT, buildCategoryQuery(), CategorySyncer::syncCategoryPage)
-            .thenApply(voidResult -> categorySync.getStatistics());
-    }
-
-    /**
-     * // TODO: Instead of reference expansion, we could cache all keys and replace references manually.
-     * Given a {@link List} representing a page of {@link Category}, this method replaces all the
-     * references with the keys and returns the reference replaced category drafts which are ready to sync. Then calls
-     * (in a blocking fashion) the sync process on these reference replaced category drafts.
-     *
-     */
-    private static void syncCategoryPage(@Nonnull final List<Category> categoryPage) {
-        final List<CategoryDraft> draftsWithKeysInReferences = replaceCategoriesReferenceIdsWithKeys(categoryPage);
-        categorySync.sync(draftsWithKeysInReferences)
-                    .toCompletableFuture()
-                    .join();
+    private static void logStatistics(@Nonnull final CategorySyncStatistics statistics) {
+        try {
+            final String statisticsAsJSONString = getStatisticsAsJSONString(statistics);
+            LOGGER.info(statisticsAsJSONString);
+        } catch (final JsonProcessingException exception) {
+            LOGGER.error("Invalid statistics JSON string..", exception);
+        }
     }
 
     /**
