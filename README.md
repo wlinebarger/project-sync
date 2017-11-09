@@ -38,5 +38,5 @@ existing commercetools project.
    ```
  - Then run the JAR
    ```bash
-   java -jar build/libs/coeur-category-sync.jar
+   java -jar build/libs/category-sync.jar
    ```   
