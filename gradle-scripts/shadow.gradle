@@ -1,0 +1,12 @@
+apply plugin: 'com.github.johnrengelman.shadow'
+shadowJar {
+    baseName = 'category-sync'
+    classifier = null
+    version = rootProject.version
+    manifest {
+        inheritFrom rootProject.tasks.jar.manifest
+    }
+    doLast {
+        println "Packaged JAR to ${destinationDir}/${archiveName}"
+    }
+}

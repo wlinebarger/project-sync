@@ -1,5 +1,5 @@
 group = 'de.coeur'
 version = '1.0-SNAPSHOT'
-
+mainClassName = 'de.coeur.sync.category.CategorySyncer'
 description = "Module to synchronise staging commercetools project data of coeur to production" +
         "existing commercetools project."
