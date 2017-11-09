@@ -3,9 +3,6 @@ shadowJar {
     baseName = 'category-sync'
     classifier = null
     version = null
-    manifest {
-        inheritFrom rootProject.tasks.jar.manifest
-    }
     doLast {
         println "Packaged JAR to ${destinationDir}/${archiveName}"
     }

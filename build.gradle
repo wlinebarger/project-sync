@@ -11,7 +11,6 @@ buildscript {
 }
 
 apply from: "$rootDir/gradle-scripts/plugins.gradle"
-apply from: "$rootDir/gradle-scripts/package.gradle"
 apply from: "$rootDir/gradle-scripts/extensions.gradle"
 apply from: "$rootDir/gradle-scripts/project-info.gradle"
 apply from: "$rootDir/gradle-scripts/java-compile.gradle"
