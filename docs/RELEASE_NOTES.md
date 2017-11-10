@@ -6,8 +6,8 @@
 ### {version} - {date}
 
 2. link to commits of release.
-3. link to Javadoc of release.
-4. link to Jar of release.
+3. link to docker image of release.
+4. link to deployed worker.
 
 5. Depending on the contents of the release use the subtitles below to 
   document the new changes in the release accordingly. Please always include
@@ -28,3 +28,10 @@
 are breaking changes. If there are, then a migration guide should be provided.
 
 -->
+### 1.0.0 - Nov 10, 2017
+[Commits](https://github.com/commercetools/commercetools-sync-java/commits/1.0.0) |
+[Docker Image](https://hub.docker.com/r/ctpcoeur/category-sync/) | 
+[iron.io worker](https://hud-e.iron.io/worker/projects/57baae114efcd50007b84e66/codes/5a05814aa5d018000ae4e8e0)
+ 
+**New Features** (1)
+ - **Category Sync** - Provide first version of the category sync from source to target CTP project. [#2](https://github.com/commercetools/project-coeur-sync/pull/2)
