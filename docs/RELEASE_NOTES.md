@@ -34,7 +34,7 @@ are breaking changes. If there are, then a migration guide should be provided.
 [iron.io worker](https://hud-e.iron.io/worker/projects/57baae114efcd50007b84e66/codes/5a05814aa5d018000ae4e8e0)
  
 **Enhancements** (1)
- - **Category Sync** - Use commercetools-sync-java v1.0.0-M6. 
+ - **Category Sync** - Updated commercetools-sync-java dependency to v1.0.0-M6. 
  
 **Bug Fixes** (1)
  - **Commons** - Fixed credential fetching through properties file. [#10](https://github.com/commercetools/project-coeur-sync/pull/10)
