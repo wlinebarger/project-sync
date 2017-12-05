@@ -70,8 +70,8 @@ public class CategorySyncer {
      */
     private static CategorySync setupSync() {
         final CategorySyncOptions categorySyncOptions = CategorySyncOptionsBuilder.of(CTP_TARGET_CLIENT)
-                                                                                  .setErrorCallBack(LOGGER::error)
-                                                                                  .setWarningCallBack(LOGGER::warn)
+                                                                                  .errorCallback(LOGGER::error)
+                                                                                  .warningCallback(LOGGER::warn)
                                                                                   .build();
         return new CategorySync(categorySyncOptions);
     }
