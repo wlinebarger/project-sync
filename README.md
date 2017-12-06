@@ -14,6 +14,9 @@ existing commercetools project.
 - [Usage](#usage)
   - [Prerequisites](#prerequisites)
   - [Run the application](#run-the-application)
+  - [Build and Deployment](#build-and-deployment)
+    - [Build](#build)
+    - [Deployment](#deployment)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -42,13 +45,16 @@ existing commercetools project.
    ```bash
    java -jar build/libs/category-sync.jar
    ```   
-## Build and Deployment
-### Build 
+   
+### Build and Deployment
+
+#### Build 
  On each push to the remote github repository, a Docker image is built. Every image has the following tags:
  - `latest` (for master branch) or branch name (any other branch)
  - short git commit SHA (first 8 chars), e.g. `11be0178`
  - tag containing the travis build number, e.g. `travis-17`
-### Deployment
+ 
+#### Deployment
  This job is currently being deployed as an iron.io worker. In order to setup the worker, it is
  required to have the following:
  - Access to the [coeur-production iron.io project](https://hud-e.iron.io/worker/projects/57baae114efcd50007b84e66/tasks).
