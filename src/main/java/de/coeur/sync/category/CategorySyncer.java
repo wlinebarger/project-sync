@@ -4,9 +4,6 @@ import com.commercetools.sync.categories.CategorySync;
 import com.commercetools.sync.categories.CategorySyncOptions;
 import com.commercetools.sync.categories.CategorySyncOptionsBuilder;
 import com.commercetools.sync.categories.helpers.CategorySyncStatistics;
-import com.commercetools.sync.commons.helpers.BaseSyncStatistics;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryDraft;
 import org.slf4j.Logger;
@@ -22,6 +19,7 @@ import static com.commercetools.sync.commons.utils.CtpQueryUtils.queryAll;
 import static de.coeur.sync.utils.SphereClientUtils.CTP_SOURCE_CLIENT;
 import static de.coeur.sync.utils.SphereClientUtils.CTP_TARGET_CLIENT;
 import static de.coeur.sync.utils.SphereClientUtils.closeCtpClients;
+import static de.coeur.sync.utils.StatisticsUtils.logStatistics;
 import static java.lang.String.format;
 
 public class CategorySyncer {
@@ -29,19 +27,19 @@ public class CategorySyncer {
     private static CategorySync categorySync;
 
     /**
-     * Fetches the {@code CTP_SOURCE_CLIENT} project categories with all needed references expanded and treats category
-     * page as a batch to the sync process. Then returns a completion stage containing the sync process statistics as a
-     * result.
+     * Fetches the {@code CTP_SOURCE_CLIENT} project categories with all needed references expanded and treats each
+     * category page as a batch to the sync process. Then returns a completion stage containing the sync process
+     * statistics as a result.
      *
      * @return completion stage containing the sync process statistics as a result.
      */
-    public static CompletionStage<Void> syncCategories() {
+    public static CompletionStage<Void> sync() {
         categorySync = setupSync();
         LOGGER.info("Starting sync..");
         return queryAll(CTP_SOURCE_CLIENT, buildCategoryQuery(), CategorySyncer::syncCategoryPage)
             .thenAccept(voidResult -> {
                 final CategorySyncStatistics statistics = categorySync.getStatistics();
-                logStatistics(statistics);
+                logStatistics(statistics, LOGGER);
                 LOGGER.info(format("Category Syncing from CTP project '%s' to project '%s' is done.",
                     CTP_SOURCE_CLIENT.getConfig().getProjectKey(),
                     CTP_TARGET_CLIENT.getConfig().getProjectKey()));
@@ -74,28 +72,5 @@ public class CategorySyncer {
                                                                                   .warningCallback(LOGGER::warn)
                                                                                   .build();
         return new CategorySync(categorySyncOptions);
-    }
-
-    private static void logStatistics(@Nonnull final CategorySyncStatistics statistics) {
-        try {
-            final String statisticsAsJSONString = getStatisticsAsJSONString(statistics);
-            LOGGER.info(statisticsAsJSONString);
-        } catch (final JsonProcessingException exception) {
-            LOGGER.error("Invalid statistics JSON string..", exception);
-        }
-    }
-
-    /**
-     * Builds a JSON String that represents the fields of the supplied instance of {@link BaseSyncStatistics}.
-     * Note: The order of the fields in the built JSON String depends on the order of the instance variables in this
-     * class.
-     *
-     * @param statistics the instance of {@link BaseSyncStatistics} from which to create a JSON String.
-     * @return a JSON String representation of the statistics object.
-     */
-    private static String getStatisticsAsJSONString(@Nonnull final BaseSyncStatistics statistics)
-        throws JsonProcessingException {
-        final ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(statistics);
     }
 }
