@@ -14,6 +14,7 @@ existing commercetools project.
 - [Usage](#usage)
   - [Prerequisites](#prerequisites)
   - [Run the application](#run-the-application)
+- [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -41,3 +42,53 @@ existing commercetools project.
    ```bash
    java -jar build/libs/category-sync.jar
    ```   
+## Build and Deployment
+### Build 
+ On each push to the remote github repository, a Docker image is built. Every image has the following tags:
+ - `latest` (for master branch) or branch name (any other branch)
+ - short git commit SHA (first 8 chars), e.g. `11be0178`
+ - tag containing the travis build number, e.g. `travis-17`
+### Deployment
+ This job is currently being deployed as an iron.io worker. In order to setup the worker, it is
+ required to have the following:
+ - Access to the [coeur-production iron.io project](https://hud-e.iron.io/worker/projects/57baae114efcd50007b84e66/tasks).
+ - [Iron.io CLI](https://github.com/iron-io/ironcli) installed
+ - Docker installed and running
+ - A Docker Hub account with access to the `ctpcoeur` organization
+ 
+ Then to deploy:
+ - If you haven't already, set up Iron.io to work with your Dockerhub account so that it can access private repositories:
+   ```bash
+   iron docker login -e <DockerHub-email> -u <DockerHub-username> -p <DockerHub-password>
+   ```
+ - Then set up a worker as follows:
+   ```bash
+    IRON_PROJECT_ID=<iron-project-id> IRON_TOKEN=<iron-project-token> \
+    iron worker upload \
+    -e COEUR_SOURCE_PROJECT_KEY='<ctp-source-project-key>' \
+    -e COEUR_SOURCE_CLIENT_ID='<ctp-source-client-id>' \
+    -e COEUR_SOURCE_CLIENT_SECRET='<ctp-source-client-secret>' \
+    -e COEUR_TARGET_PROJECT_KEY='<ctp-target-project-key>' \
+    -e COEUR_TARGET_CLIENT_ID='<ctp-target-client-id>' \
+    -e COEUR_TARGET_CLIENT_SECRET='<ctp-target-client-secret>' \
+    -name <worker-name>  ctpcoeur/category-sync:<current-version>
+   ```
+ - For staging deployment, use the docker image with the tag `latest`, which is automatically built on travis after merging to master
+ branch.
+ - For production deployment, use the docker image with the tag `production`. 
+    - In order to create it, you need to create a new git commit tag. This will trigger a new Travis build as described
+  before but will create an additional Docker tag `production`. 
+    - The tag can be created via command line
+         ```bash
+         git tag -a v1.0.1 -m "Minor text adjustments."
+         ```
+        or github UI "Draft new Release":
+        https://github.com/commercetools/project-coeur-sync/releases
+        
+  - Post deployment on iron.io, it is important to
+    - Setup a new task for the newly uploaded code (via the iron.io web UI). The old tasks remain scheduled for workers 
+    uploaded in the past.
+    - Setup the _max retries_ to `2` for the worker code, via the web UI. 
+
+## License
+Copyright (c) 2017 commercetools
