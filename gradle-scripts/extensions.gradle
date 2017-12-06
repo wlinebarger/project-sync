@@ -9,4 +9,5 @@ ext {
     jacocoVersion = '0.7.9'
     findbugsVersion = '3.0.1'
     commercetoolsSyncJava='v1.0.0-M6'
+    apacheCliVersion = '1.4'
 }
