@@ -57,8 +57,8 @@ public class ProductSyncer {
     private static void syncProductPage(@Nonnull final List<Product> productPage) {
         final List<ProductDraft> draftsWithKeysInReferences = replaceProductsReferenceIdsWithKeys(productPage);
         productSync.sync(draftsWithKeysInReferences)
-                    .toCompletableFuture()
-                    .join();
+                   .toCompletableFuture()
+                   .join();
     }
 
     /**
