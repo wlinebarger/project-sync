@@ -139,10 +139,6 @@ public final class CliRunner {
                 SYNC_MODULE_OPTION_SHORT, SYNC_MODULE_OPTION_LONG, ILLEGAL_ARGUMENT_MESSAGE));
     }
 
-    /**
-     * Print the help for <code>options</code> with the specified command line syntax.  This method prints help
-     * information to System.out.
-     */
     private void printHelpToStdOut() {
         final HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp(getApplicationName(), options);
@@ -153,9 +149,6 @@ public final class CliRunner {
         return isBlank(implementationTitle) ? APPLICATION_DEFAULT_NAME : implementationTitle;
     }
 
-    /**
-     * Print the application version to System.out.
-     */
     private static void logApplicationVersion() {
         final String implementationVersion = getApplicationVersion();
         LOGGER.info(implementationVersion);
