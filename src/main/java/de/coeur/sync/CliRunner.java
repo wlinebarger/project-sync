@@ -49,9 +49,13 @@ public final class CliRunner {
             commandLine = parser.parse(options, arguments);
             processCliArguments();
         } catch (final ParseException | IllegalArgumentException exception) {
-            LOGGER.error(format("Parse error:%n%s", exception.getMessage()), exception);
-            printHelpToStdOut();
+            handleIllegalArgumentException(format("Parse error:%n%s", exception.getMessage()));
         }
+    }
+
+    private void handleIllegalArgumentException(@Nonnull final String errorMessage) {
+        LOGGER.error(errorMessage);
+        printHelpToStdOut();
     }
 
     private static Options getCliOptions() {
@@ -84,8 +88,7 @@ public final class CliRunner {
     private void processCliArguments() {
         final Option[] options = commandLine.getOptions();
         if (options.length == 0) {
-            LOGGER.error("Please pass at least 1 option to the CLI.");
-            printHelpToStdOut();
+            handleIllegalArgumentException("Please pass at least 1 option to the CLI.");
         } else {
             final Option option = options[0];
             final String optionName = option.getOpt();
@@ -100,8 +103,7 @@ public final class CliRunner {
                     logApplicationVersion();
                     break;
                 default:
-                    LOGGER.error(format("Unrecognized option: -%s", optionName));
-                    printHelpToStdOut();
+                    handleIllegalArgumentException(format("Unrecognized option: -%s", optionName));
             }
         }
     }
