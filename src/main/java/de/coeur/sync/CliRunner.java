@@ -22,16 +22,10 @@ public final class CliRunner {
     private static final String SYNC_MODULE_OPTION_SHORT = "s";
     private static final String HELP_OPTION_SHORT = "h";
     private static final String VERSION_OPTION_SHORT = "v";
+
     private static final String SYNC_MODULE_OPTION_LONG = "sync";
     private static final String SYNC_MODULE_OPTION_PRODUCT_SYNC = "products";
     private static final String SYNC_MODULE_OPTION_CATEGORY_SYNC = "categories";
-    private static final String SYNC_MODULE_OPTION_DESCRIPTION =
-        format("Choose which sync module to run. \"%s\" runs product sync. \"%s\" runs category sync.",
-            SYNC_MODULE_OPTION_PRODUCT_SYNC, SYNC_MODULE_OPTION_CATEGORY_SYNC);
-    private static final String ILLEGAL_ARGUMENT_MESSAGE =
-        format("Please choose either \"%s\" or \"%s\".", SYNC_MODULE_OPTION_CATEGORY_SYNC,
-            SYNC_MODULE_OPTION_PRODUCT_SYNC);
-
 
     private static final String APPLICATION_DEFAULT_NAME = "COEUR-SYNC";
     private static final String APPLICATION_DEFAULT_VERSION = "1.0-dev";
@@ -64,7 +58,9 @@ public final class CliRunner {
         final Options options = new Options();
         final Option syncOption = Option.builder(SYNC_MODULE_OPTION_SHORT)
                                         .longOpt(SYNC_MODULE_OPTION_LONG)
-                                        .desc(SYNC_MODULE_OPTION_DESCRIPTION)
+                                        .desc(format("Choose which sync module to run. \"%s\" runs product sync. \"%s\""
+                                                + " runs category sync.", SYNC_MODULE_OPTION_PRODUCT_SYNC,
+                                            SYNC_MODULE_OPTION_CATEGORY_SYNC))
                                         .hasArg()
                                         .build();
 
@@ -134,8 +130,9 @@ public final class CliRunner {
 
     private static void throwIllegalArgExceptionForSyncOption(@Nullable final String arg) {
         throw new IllegalArgumentException(
-            format("Unknown argument \"%s\" supplied to \"-%s\" or \"--%s\"! %s", arg,
-                SYNC_MODULE_OPTION_SHORT, SYNC_MODULE_OPTION_LONG, ILLEGAL_ARGUMENT_MESSAGE));
+            format("Unknown argument \"%s\" supplied to \"-%s\" or \"--%s\"! Please choose either \"%s\" or \"%s\".",
+                arg, SYNC_MODULE_OPTION_SHORT, SYNC_MODULE_OPTION_LONG, SYNC_MODULE_OPTION_PRODUCT_SYNC,
+                SYNC_MODULE_OPTION_CATEGORY_SYNC));
     }
 
     private void printHelpToStdOut() {
