@@ -64,7 +64,6 @@ public final class CliRunner {
         final Options options = new Options();
         final Option syncOption = Option.builder(SYNC_MODULE_OPTION_SHORT)
                                         .longOpt(SYNC_MODULE_OPTION_LONG)
-                                        //.required(SYNC_MODULE_OPTION_IS_REQUIRED)
                                         .desc(SYNC_MODULE_OPTION_DESCRIPTION)
                                         .hasArg()
                                         .build();
