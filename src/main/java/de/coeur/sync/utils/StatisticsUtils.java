@@ -10,10 +10,8 @@ import javax.annotation.Nonnull;
 public class StatisticsUtils {
 
     /**
-     * TODO: FIX THIS JAVADOC
-     * Builds a JSON String that represents the fields of the supplied instance of {@link BaseSyncStatistics}.
-     * Note: The order of the fields in the built JSON String depends on the order of the instance variables in this
-     * class.
+     * Builds a JSON String that represents the fields of the supplied instance of {@link BaseSyncStatistics} and then
+     * logs the string with the supplied {@code logger} instance.
      *
      * @param statistics the instance of {@link BaseSyncStatistics} from which to create a JSON String.
      * @param logger the logger
@@ -29,8 +27,6 @@ public class StatisticsUtils {
 
     /**
      * Builds a JSON String that represents the fields of the supplied instance of {@link BaseSyncStatistics}.
-     * Note: The order of the fields in the built JSON String depends on the order of the instance variables in this
-     * class.
      *
      * @param statistics the instance of {@link BaseSyncStatistics} from which to create a JSON String.
      * @return a JSON String representation of the statistics object.
