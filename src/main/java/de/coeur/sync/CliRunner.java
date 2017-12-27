@@ -34,7 +34,7 @@ public final class CliRunner {
 
 
     private static final String APPLICATION_DEFAULT_NAME = "COEUR-SYNC";
-    private static final String APPLICATION_DEFAULT_VERSION = "1.0.0";
+    private static final String APPLICATION_DEFAULT_VERSION = "1.0-dev";
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
