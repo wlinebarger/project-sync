@@ -11,6 +11,7 @@ import io.sphere.sdk.products.queries.ProductQuery;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static com.commercetools.sync.products.utils.ProductReferenceReplacementUtils.buildProductQuery;
 import static com.commercetools.sync.products.utils.ProductReferenceReplacementUtils.replaceProductsReferenceIdsWithKeys;
@@ -33,10 +34,8 @@ public class ProductSyncer extends Syncer<Product, ProductDraft,
     }
 
     @Override
-    public void syncPage(@Nonnull final List<Product> page) {
+    public CompletableFuture<ProductSyncStatistics> syncPage(@Nonnull final List<Product> page) {
         final List<ProductDraft> draftsWithKeysInReferences = replaceProductsReferenceIdsWithKeys(page);
-        sync.sync(draftsWithKeysInReferences)
-            .toCompletableFuture()
-            .join();
+        return sync.sync(draftsWithKeysInReferences).toCompletableFuture();
     }
 }

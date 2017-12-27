@@ -11,6 +11,7 @@ import io.sphere.sdk.categories.queries.CategoryQuery;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static com.commercetools.sync.categories.utils.CategoryReferenceReplacementUtils.buildCategoryQuery;
 import static com.commercetools.sync.categories.utils.CategoryReferenceReplacementUtils.replaceCategoriesReferenceIdsWithKeys;
@@ -33,10 +34,9 @@ public class CategorySyncer extends Syncer<Category, CategoryDraft,
     }
 
     @Override
-    public void syncPage(@Nonnull final List<Category> page) {
+    public CompletableFuture<CategorySyncStatistics> syncPage(@Nonnull final List<Category> page) {
         final List<CategoryDraft> draftsWithKeysInReferences = replaceCategoriesReferenceIdsWithKeys(page);
-        sync.sync(draftsWithKeysInReferences)
-                    .toCompletableFuture()
-                    .join();
+        return sync.sync(draftsWithKeysInReferences)
+            .toCompletableFuture();
     }
 }

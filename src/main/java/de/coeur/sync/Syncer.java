@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import static com.commercetools.sync.commons.utils.CtpQueryUtils.queryAll;
@@ -18,6 +19,7 @@ import static de.coeur.sync.utils.SphereClientUtils.CTP_TARGET_CLIENT;
 import static de.coeur.sync.utils.SphereClientUtils.closeCtpClients;
 import static de.coeur.sync.utils.StatisticsUtils.logStatistics;
 import static java.lang.String.format;
+import static java.util.concurrent.CompletableFuture.allOf;
 
 public abstract class Syncer<
     T extends Resource,
@@ -33,15 +35,16 @@ public abstract class Syncer<
 
     /**
      * Fetches the {@code CTP_SOURCE_CLIENT} project resources of type {@code T} with all needed references expanded and
-     * treats each page as a batch to the sync process. Then returns a completion stage containing no result after the
-     * execution of the sync process and logging the result.
+     * treats each page as a batch to the sync process. Then executes the sync process of all pages in parallel. It then
+     * returns a completion stage containing no result after the execution of the sync process and logging the result.
      *
      * @return completion stage containing no result after the execution of the sync process and logging the result.
      */
     CompletionStage<Void> sync() {
         LOGGER.info("Starting sync..");
         return queryAll(CTP_SOURCE_CLIENT, query, this::syncPage)
-            .thenAccept(voidResult -> processSyncResult());
+            .thenCompose(syncStages -> allOf(syncStages.toArray(new CompletableFuture[syncStages.size()])))
+            .thenAccept(ignoredResult -> processSyncResult());
     }
 
     private void processSyncResult() {
@@ -54,8 +57,8 @@ public abstract class Syncer<
     }
 
     /**
-     * Given a {@link List} representing a page of resources of type {@code T}, this method calls
-     * (in a blocking fashion) the sync process on the given page as a batch.
+     * Given a {@link List} representing a page of resources of type {@code T}, this method creates a
+     * {@link CompletableFuture} of each sync process on the given page as a batch.
      */
-    protected abstract void syncPage(@Nonnull final List<T> page);
+    protected abstract CompletableFuture<U> syncPage(@Nonnull final List<T> page);
 }
