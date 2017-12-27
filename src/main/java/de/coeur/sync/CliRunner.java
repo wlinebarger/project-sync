@@ -68,12 +68,12 @@ public final class CliRunner {
                                         .hasArg()
                                         .build();
 
-        final Option helpOption = Option.builder("h")
+        final Option helpOption = Option.builder(HELP_OPTION_SHORT)
                                         .longOpt("help")
                                         .desc("Print help information to System.out.")
                                         .build();
 
-        final Option versionOption = Option.builder("v")
+        final Option versionOption = Option.builder(VERSION_OPTION_SHORT)
                                            .longOpt("version")
                                            .desc("Print the version of the application.")
                                            .build();
@@ -94,13 +94,13 @@ public final class CliRunner {
             final Option option = options[0];
             final String optionName = option.getOpt();
             switch (optionName) {
-                case "s" :
+                case SYNC_MODULE_OPTION_SHORT :
                     processSyncOption();
                     break;
-                case "h" :
+                case HELP_OPTION_SHORT :
                     printHelpToStdOut();
                     break;
-                case "v" :
+                case VERSION_OPTION_SHORT :
                     logApplicationVersion();
                     break;
                 default:
