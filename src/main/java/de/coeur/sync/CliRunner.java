@@ -44,8 +44,8 @@ public final class CliRunner {
     private Syncer syncer;
 
 
-    public static CliRunner of(@Nonnull final String[] arguments) {
-        return new CliRunner(arguments);
+    static void of(@Nonnull final String[] arguments) {
+        new CliRunner(arguments);
     }
 
     private CliRunner(@Nonnull final String[] arguments) {
