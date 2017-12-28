@@ -1,7 +1,5 @@
 package de.coeur.sync;
 
-import de.coeur.sync.category.CategorySyncer;
-import de.coeur.sync.product.ProductSyncer;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -13,19 +11,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public final class CliRunner {
-    private static final String SYNC_MODULE_OPTION_SHORT = "s";
+    public static final String SYNC_MODULE_OPTION_SHORT = "s";
     private static final String HELP_OPTION_SHORT = "h";
     private static final String VERSION_OPTION_SHORT = "v";
 
-    private static final String SYNC_MODULE_OPTION_LONG = "sync";
-    private static final String SYNC_MODULE_OPTION_PRODUCT_SYNC = "products";
-    private static final String SYNC_MODULE_OPTION_CATEGORY_SYNC = "categories";
+    public static final String SYNC_MODULE_OPTION_LONG = "sync";
+    public static final String SYNC_MODULE_OPTION_PRODUCT_SYNC = "products";
+    public static final String SYNC_MODULE_OPTION_CATEGORY_SYNC = "categories";
 
     private static final String APPLICATION_DEFAULT_NAME = "COEUR-SYNC";
     private static final String APPLICATION_DEFAULT_VERSION = "1.0-dev";
@@ -35,7 +32,6 @@ public final class CliRunner {
 
     private Options options;
     private CommandLine commandLine;
-    private Syncer syncer;
 
 
     static void of(@Nonnull final String[] arguments) {
@@ -110,32 +106,11 @@ public final class CliRunner {
 
     private void processSyncOption() {
         final String syncOptionValue = commandLine.getOptionValue(SYNC_MODULE_OPTION_SHORT);
-
-        if (isBlank(syncOptionValue)) {
-            throwIllegalArgExceptionForSyncOption(syncOptionValue);
-        }
-
-        switch (syncOptionValue.trim().toLowerCase()) {
-            case SYNC_MODULE_OPTION_CATEGORY_SYNC:
-                syncer = new CategorySyncer();
-                break;
-            case SYNC_MODULE_OPTION_PRODUCT_SYNC:
-                syncer = new ProductSyncer();
-                break;
-            default:
-                throwIllegalArgExceptionForSyncOption(syncOptionValue);
-        }
-
-        syncer.sync().toCompletableFuture().join();
+        SyncerFactory.getSyncer(syncOptionValue)
+                     .sync().toCompletableFuture().join();
     }
 
 
-    private static void throwIllegalArgExceptionForSyncOption(@Nullable final String arg) {
-        throw new IllegalArgumentException(
-            format("Unknown argument \"%s\" supplied to \"-%s\" or \"--%s\"! Please choose either \"%s\" or \"%s\".",
-                arg, SYNC_MODULE_OPTION_SHORT, SYNC_MODULE_OPTION_LONG, SYNC_MODULE_OPTION_PRODUCT_SYNC,
-                SYNC_MODULE_OPTION_CATEGORY_SYNC));
-    }
 
     private void printHelpToStdOut() {
         final HelpFormatter formatter = new HelpFormatter();
