@@ -97,4 +97,4 @@ existing commercetools project.
     - Setup the _max retries_ to `2` for the worker code, via the web UI. 
 
 ## License
-Copyright (c) 2017 commercetools
+Copyright (c) 2018 commercetools
