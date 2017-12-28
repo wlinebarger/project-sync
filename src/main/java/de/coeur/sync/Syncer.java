@@ -21,6 +21,25 @@ import static de.coeur.sync.utils.StatisticsUtils.logStatistics;
 import static java.lang.String.format;
 import static java.util.concurrent.CompletableFuture.allOf;
 
+/**
+ * Base class of the syncer that handles syncing a resource from a source CTP project to a target CTP project.
+ * @param <T> The type of the resource (e.g. {@link io.sphere.sdk.products.Product},
+ *            {@link io.sphere.sdk.categories.Category}, etc..)
+ * @param <S> The type of the resource draft (e.g. {@link io.sphere.sdk.products.ProductDraft},
+ *            {@link io.sphere.sdk.categories.CategoryDraft}, etc..)
+ * @param <U> The type of the sync statistics resulting from the sync process (e.g.
+ *            {@link com.commercetools.sync.products.helpers.ProductSyncStatistics},
+ *            {@link com.commercetools.sync.categories.helpers.CategorySyncStatistics}, etc..)
+ * @param <V> The type of the sync options used for the sync (e.g.
+ *            {@link com.commercetools.sync.products.ProductSyncOptions},
+ *            {@link com.commercetools.sync.categories.CategorySyncOptions}, etc..)
+ * @param <C> The type of the query used to query for the source resources (e.g.
+ *            {@link io.sphere.sdk.products.queries.ProductQuery},
+ *            {@link io.sphere.sdk.categories.queries.CategoryQuery}, etc..)
+ * @param <B> The type of the sync instance used to execute the sync process (e.g.
+ *            {@link com.commercetools.sync.products.ProductSync},
+ *            {@link com.commercetools.sync.categories.CategorySync}, etc..)
+ */
 public abstract class Syncer<
     T extends Resource,
     S,
