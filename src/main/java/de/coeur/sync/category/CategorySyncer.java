@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import static com.commercetools.sync.categories.utils.CategoryReferenceReplacementUtils.buildCategoryQuery;
 import static com.commercetools.sync.categories.utils.CategoryReferenceReplacementUtils.replaceCategoriesReferenceIdsWithKeys;
@@ -38,9 +37,9 @@ public class CategorySyncer extends Syncer<Category, CategoryDraft,
     }
 
     @Override
-    protected CompletableFuture<CategorySyncStatistics> syncPage(@Nonnull final List<Category> page) {
-        final List<CategoryDraft> draftsWithKeysInReferences = replaceCategoriesReferenceIdsWithKeys(page);
-        return sync.sync(draftsWithKeysInReferences)
-            .toCompletableFuture();
+    @Nonnull
+    protected List<CategoryDraft> getDraftsFromPage(@Nonnull final List<Category> page) {
+        return replaceCategoriesReferenceIdsWithKeys(page);
     }
+
 }

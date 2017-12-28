@@ -84,5 +84,20 @@ public abstract class Syncer<
      * Given a {@link List} representing a page of resources of type {@code T}, this method creates a
      * {@link CompletableFuture} of each sync process on the given page as a batch.
      */
-    protected abstract CompletableFuture<U> syncPage(@Nonnull final List<T> page);
+    @Nonnull
+    private CompletableFuture<U> syncPage(@Nonnull final List<T> page) {
+        final List<S> draftsWithKeysInReferences = getDraftsFromPage(page);
+        return sync.sync(draftsWithKeysInReferences)
+                   .toCompletableFuture();
+    }
+
+    /**
+     * Given a {@link List} representing a page of resources of type {@code T}, this method creates a
+     * a list of drafts of type {@link S} where reference ids of the references are replaced with keys
+     * and are ready for reference resolution by the sync process.
+     *
+     * @return list of drafts of type {@link S}.
+     */
+    @Nonnull
+    protected abstract List<S> getDraftsFromPage(@Nonnull final List<T> page);
 }
