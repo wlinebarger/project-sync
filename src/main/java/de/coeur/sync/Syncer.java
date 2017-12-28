@@ -49,8 +49,13 @@ public abstract class Syncer<
     B extends BaseSync<S, U, V>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Syncer.class);
-    protected B sync;
-    protected C query;
+    private final B sync;
+    private final C query;
+
+    public Syncer(@Nonnull final B sync, @Nonnull final C query) {
+        this.sync = sync;
+        this.query = query;
+    }
 
     /**
      * Fetches the {@code CTP_SOURCE_CLIENT} project resources of type {@code T} with all needed references expanded and

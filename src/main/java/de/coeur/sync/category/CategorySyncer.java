@@ -28,13 +28,13 @@ public class CategorySyncer extends Syncer<Category, CategoryDraft,
      * Instantiates a {@link Syncer} instance.
      */
     public CategorySyncer() {
-        final CategorySyncOptions categorySyncOptions = CategorySyncOptionsBuilder.of(CTP_TARGET_CLIENT)
-                                                                                  .errorCallback(LOGGER::error)
-                                                                                  .warningCallback(LOGGER::warn)
-                                                                                  .build();
-        this.sync = new CategorySync(categorySyncOptions);
-        this.query = buildCategoryQuery();
-        // TODO: Instead of reference expansion, we could cache all keys and replace references manually.
+        super(
+            new CategorySync(CategorySyncOptionsBuilder.of(CTP_TARGET_CLIENT)
+                                                       .errorCallback(LOGGER::error)
+                                                       .warningCallback(LOGGER::warn)
+                                                       .build()),
+            buildCategoryQuery());
+            // TODO: Instead of reference expansion, we could cache all keys and replace references manually.
     }
 
     @Override

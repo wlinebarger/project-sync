@@ -28,13 +28,13 @@ public class ProductSyncer extends Syncer<Product, ProductDraft,
      * Instantiates a {@link Syncer} instance.
      */
     public ProductSyncer() {
-        final ProductSyncOptions productSyncOptions = ProductSyncOptionsBuilder.of(CTP_TARGET_CLIENT)
-                                                                               .errorCallback(LOGGER::error)
-                                                                               .warningCallback(LOGGER::warn)
-                                                                               .build();
-        this.sync = new ProductSync(productSyncOptions);
-        this.query = buildProductQuery();
-        // TODO: Instead of reference expansion, we could cache all keys and replace references manually.
+        super(
+            new ProductSync(ProductSyncOptionsBuilder.of(CTP_TARGET_CLIENT)
+                                                       .errorCallback(LOGGER::error)
+                                                       .warningCallback(LOGGER::warn)
+                                                       .build()),
+            buildProductQuery());
+            // TODO: Instead of reference expansion, we could cache all keys and replace references manually.
     }
 
     @Override
