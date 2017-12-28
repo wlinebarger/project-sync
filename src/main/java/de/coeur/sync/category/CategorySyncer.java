@@ -34,7 +34,7 @@ public class CategorySyncer extends Syncer<Category, CategoryDraft,
     }
 
     @Override
-    public CompletableFuture<CategorySyncStatistics> syncPage(@Nonnull final List<Category> page) {
+    protected CompletableFuture<CategorySyncStatistics> syncPage(@Nonnull final List<Category> page) {
         final List<CategoryDraft> draftsWithKeysInReferences = replaceCategoriesReferenceIdsWithKeys(page);
         return sync.sync(draftsWithKeysInReferences)
             .toCompletableFuture();

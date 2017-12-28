@@ -34,7 +34,7 @@ public class ProductSyncer extends Syncer<Product, ProductDraft,
     }
 
     @Override
-    public CompletableFuture<ProductSyncStatistics> syncPage(@Nonnull final List<Product> page) {
+    protected CompletableFuture<ProductSyncStatistics> syncPage(@Nonnull final List<Product> page) {
         final List<ProductDraft> draftsWithKeysInReferences = replaceProductsReferenceIdsWithKeys(page);
         return sync.sync(draftsWithKeysInReferences).toCompletableFuture();
     }

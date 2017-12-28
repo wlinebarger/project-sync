@@ -40,7 +40,7 @@ public abstract class Syncer<
      *
      * @return completion stage containing no result after the execution of the sync process and logging the result.
      */
-    CompletionStage<Void> sync() {
+    public CompletionStage<Void> sync() {
         LOGGER.info("Starting sync..");
         return queryAll(CTP_SOURCE_CLIENT, query, this::syncPage)
             .thenCompose(syncStages -> allOf(syncStages.toArray(new CompletableFuture[syncStages.size()])))
