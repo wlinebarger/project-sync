@@ -29,7 +29,7 @@ public abstract class Syncer<
     C extends QueryDsl<T, C>,
     B extends BaseSync<S, U, V>> {
 
-    protected static final Logger LOGGER = LoggerFactory.getLogger(Syncer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Syncer.class);
     protected B sync;
     protected C query;
 

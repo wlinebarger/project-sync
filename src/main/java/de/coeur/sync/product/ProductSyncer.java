@@ -8,6 +8,8 @@ import de.coeur.sync.Syncer;
 import io.sphere.sdk.products.Product;
 import io.sphere.sdk.products.ProductDraft;
 import io.sphere.sdk.products.queries.ProductQuery;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -19,6 +21,8 @@ import static de.coeur.sync.utils.SphereClientUtils.CTP_TARGET_CLIENT;
 
 public class ProductSyncer extends Syncer<Product, ProductDraft,
     ProductSyncStatistics, ProductSyncOptions, ProductQuery, ProductSync> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductSyncer.class);
 
     /**
      * Instantiates a {@link Syncer} instance.
