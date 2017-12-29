@@ -19,7 +19,6 @@ import static de.coeur.sync.utils.SphereClientUtils.CTP_TARGET_CLIENT;
 import static de.coeur.sync.utils.SphereClientUtils.closeCtpClients;
 import static de.coeur.sync.utils.StatisticsUtils.logStatistics;
 import static java.lang.String.format;
-import static java.util.concurrent.CompletableFuture.allOf;
 
 /**
  * Base class of the syncer that handles syncing a resource from a source CTP project to a target CTP project.
@@ -67,7 +66,6 @@ public abstract class Syncer<
     public CompletionStage<Void> sync() {
         LOGGER.info("Starting sync..");
         return queryAll(CTP_SOURCE_CLIENT, query, this::syncPage)
-            .thenCompose(syncStages -> allOf(syncStages.toArray(new CompletableFuture[syncStages.size()])))
             .thenAccept(ignoredResult -> processSyncResult());
     }
 
@@ -85,10 +83,9 @@ public abstract class Syncer<
      * {@link CompletableFuture} of each sync process on the given page as a batch.
      */
     @Nonnull
-    private CompletableFuture<U> syncPage(@Nonnull final List<T> page) {
+    private U syncPage(@Nonnull final List<T> page) {
         final List<S> draftsWithKeysInReferences = getDraftsFromPage(page);
-        return sync.sync(draftsWithKeysInReferences)
-                   .toCompletableFuture();
+        return sync.sync(draftsWithKeysInReferences).toCompletableFuture().join();
     }
 
     /**
