@@ -39,13 +39,27 @@ existing commercetools project.
 ### Run the application   
  - First, package the JAR
    ```bash
-   ./gradlew clean jar
+   ./gradlew clean shadowJar
    ```
- - Then run the JAR
+ - To run the product sync
    ```bash
-   java -jar build/libs/category-sync.jar
-   ```   
+   java -jar build/libs/coeur-sync.jar -s products
+   ```  
+    
+- To run the category sync
+   ```bash
+   java -jar build/libs/coeur-sync.jar -s categories
+   ```  
    
+- Usage
+  ```bash
+  usage: project-coeur-sync
+   -h,--help         Print help information to System.out.
+   -s,--sync <arg>   Choose which sync module to run. "products" runs
+                     product sync. "categories" runs category sync.
+   -v,--version      Print the version of the application.
+  ```
+    
 ### Build and Deployment
 
 #### Build 
