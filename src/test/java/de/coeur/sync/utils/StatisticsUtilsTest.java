@@ -9,7 +9,7 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StatisticsUtilsTest {
-    private static BaseSyncStatistics syncStatistics;
+    private BaseSyncStatistics syncStatistics;
 
     // TODO: NEED TO TEST #logStatistics
 
@@ -17,7 +17,6 @@ public class StatisticsUtilsTest {
     @Test
     public void getStatisticsAsJSONString_WithProductSyncStatistics_ShouldBuildJsonString()
         throws JsonProcessingException {
-
         syncStatistics = new ProductSyncStatistics();
         syncStatistics.incrementCreated(10);
         syncStatistics.incrementFailed(10);
