@@ -31,7 +31,7 @@ public class StatisticsUtils {
      * @param statistics the instance of {@link BaseSyncStatistics} from which to create a JSON String.
      * @return a JSON String representation of the statistics object.
      */
-    private static String getStatisticsAsJSONString(@Nonnull final BaseSyncStatistics statistics)
+    static String getStatisticsAsJSONString(@Nonnull final BaseSyncStatistics statistics)
         throws JsonProcessingException {
         final ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(statistics);
