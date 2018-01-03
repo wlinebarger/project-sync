@@ -15,7 +15,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public final class SyncerFactory {
 
-    private SyncerFactory(){
+    private SyncerFactory() {
     }
 
     /**
@@ -26,29 +26,29 @@ public final class SyncerFactory {
      *                        "categories". Other cases, would cause an {@link IllegalArgumentException} to be thrown.
      * @return The instance of the syncer corresponding to the passed option value.
      * @throws IllegalArgumentException if a wrong option value is passed to the sync option. (Wrong values are anything
-     *         other than "products" or "categories".
+     *                                  other than "products" or "categories".
      */
     @Nonnull
-    public static Syncer getSyncer(@Nullable final String syncOptionValue) {
+    static Syncer getSyncer(@Nullable final String syncOptionValue) {
         if (isBlank(syncOptionValue)) {
-            throwIllegalArgExceptionForSyncOption(syncOptionValue);
+            final String errorMessage = format(
+                "Blank argument supplied to \"-%s\" or \"--%s\" option! Please choose either \"%s\" or \"%s\".",
+                SYNC_MODULE_OPTION_SHORT, SYNC_MODULE_OPTION_LONG, SYNC_MODULE_OPTION_PRODUCT_SYNC,
+                SYNC_MODULE_OPTION_CATEGORY_SYNC);
+            throw new IllegalArgumentException(errorMessage);
         }
 
-        switch (syncOptionValue.trim().toLowerCase()) {
+        final String valueTrimmedAndLowerCased = syncOptionValue.trim().toLowerCase();
+        switch (valueTrimmedAndLowerCased) {
             case SYNC_MODULE_OPTION_CATEGORY_SYNC:
                 return new CategorySyncer();
             case SYNC_MODULE_OPTION_PRODUCT_SYNC:
                 return new ProductSyncer();
             default:
-                throwIllegalArgExceptionForSyncOption(syncOptionValue);
+                final String errorMessage = format("Unknown argument \"%s\" supplied to \"-%s\" or \"--%s\" option! Please "
+                        + "choose either \"%s\" or \"%s\".", syncOptionValue, SYNC_MODULE_OPTION_SHORT,
+                    SYNC_MODULE_OPTION_LONG, SYNC_MODULE_OPTION_PRODUCT_SYNC, SYNC_MODULE_OPTION_CATEGORY_SYNC);
+                throw new IllegalArgumentException(errorMessage);
         }
-        return null;
-    }
-
-    private static void throwIllegalArgExceptionForSyncOption(@Nullable final String arg) {
-        throw new IllegalArgumentException(
-            format("Unknown argument \"%s\" supplied to \"-%s\" or \"--%s\"! Please choose either \"%s\" or \"%s\".",
-                arg, SYNC_MODULE_OPTION_SHORT, SYNC_MODULE_OPTION_LONG, SYNC_MODULE_OPTION_PRODUCT_SYNC,
-                SYNC_MODULE_OPTION_CATEGORY_SYNC));
     }
 }

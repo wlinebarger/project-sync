@@ -15,7 +15,7 @@ public class SyncerFactoryTest {
     public void getSyncer_WithNullOptionValue_ShouldThrowIllegalArgumentException() {
         assertThatThrownBy(() -> SyncerFactory.getSyncer(null))
             .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("Unknown argument \"null\" supplied to \"-s\" or \"--sync\"! Please choose either"
+            .hasMessageContaining("Blank argument supplied to \"-s\" or \"--sync\" option! Please choose either"
                 + " \"products\" or \"categories\".");
     }
 
@@ -23,7 +23,7 @@ public class SyncerFactoryTest {
     public void getSyncer_WithEmptyOptionValue_ShouldThrowIllegalArgumentException() {
         assertThatThrownBy(() -> SyncerFactory.getSyncer(""))
             .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("Unknown argument \"\" supplied to \"-s\" or \"--sync\"! Please choose either"
+            .hasMessageContaining("Blank argument supplied to \"-s\" or \"--sync\" option! Please choose either"
                 + " \"products\" or \"categories\".");
     }
 
@@ -32,8 +32,8 @@ public class SyncerFactoryTest {
         final String unknownOptionValue = "anyOption";
         assertThatThrownBy(() -> SyncerFactory.getSyncer(unknownOptionValue))
             .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining(format("Unknown argument \"%s\" supplied to \"-s\" or \"--sync\"! Please choose"
-                + " either \"products\" or \"categories\".", unknownOptionValue));
+            .hasMessageContaining(format("Unknown argument \"%s\" supplied to \"-s\" or \"--sync\" option! Please "
+                + "choose either \"products\" or \"categories\".", unknownOptionValue));
     }
 
     @Test
