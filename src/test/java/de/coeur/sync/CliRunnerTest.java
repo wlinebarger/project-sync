@@ -67,6 +67,17 @@ public class CliRunnerTest {
         assertOutputStreamContainsHelpUsageWithSpecifiedCliOptions();
     }
 
+    private void assertSingleLoggingEvent(@Nonnull final Level logLevel,
+                                          @Nonnull final String logMessage,
+                                          @Nullable final Throwable logThrowable) {
+        assertThat(testLogger.getAllLoggingEvents()).hasSize(1);
+        final LoggingEvent loggingEvent = testLogger.getAllLoggingEvents().get(0);
+        assertThat(loggingEvent).isExactlyInstanceOf(LoggingEvent.class);
+        assertThat(loggingEvent.getLevel()).isEqualTo(logLevel);
+        assertThat(loggingEvent.getMessage()).contains(logMessage);
+        assertThat(loggingEvent.getThrowable().orNull()).isEqualTo(logThrowable);
+    }
+
     private void assertOutputStreamContainsHelpUsageWithSpecifiedCliOptions() throws UnsupportedEncodingException {
         assertThat(outputStream.toString("UTF-8"))
             .contains(format("usage: %s", APPLICATION_DEFAULT_NAME))
@@ -96,17 +107,6 @@ public class CliRunnerTest {
         new CliRunner().run(new String[]{"-v"});
 
         assertSingleLoggingEvent(Level.INFO, APPLICATION_DEFAULT_VERSION, null);
-    }
-
-    private void assertSingleLoggingEvent(@Nonnull final Level logLevel,
-                                          @Nonnull final String logMessage,
-                                          @Nullable final Throwable logThrowable) {
-        assertThat(testLogger.getAllLoggingEvents()).hasSize(1);
-        final LoggingEvent loggingEvent = testLogger.getAllLoggingEvents().get(0);
-        assertThat(loggingEvent).isExactlyInstanceOf(LoggingEvent.class);
-        assertThat(loggingEvent.getLevel()).isEqualTo(logLevel);
-        assertThat(loggingEvent.getMessage()).contains(logMessage);
-        assertThat(loggingEvent.getThrowable().orNull()).isEqualTo(logThrowable);
     }
 
     @Test
