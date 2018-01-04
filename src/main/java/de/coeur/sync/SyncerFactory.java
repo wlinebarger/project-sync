@@ -45,8 +45,8 @@ public final class SyncerFactory {
             case SYNC_MODULE_OPTION_PRODUCT_SYNC:
                 return new ProductSyncer();
             default:
-                final String errorMessage = format("Unknown argument \"%s\" supplied to \"-%s\" or \"--%s\" option! Please "
-                        + "choose either \"%s\" or \"%s\".", syncOptionValue, SYNC_MODULE_OPTION_SHORT,
+                final String errorMessage = format("Unknown argument \"%s\" supplied to \"-%s\" or \"--%s\" option! "
+                        + "Please choose either \"%s\" or \"%s\".", syncOptionValue, SYNC_MODULE_OPTION_SHORT,
                     SYNC_MODULE_OPTION_LONG, SYNC_MODULE_OPTION_PRODUCT_SYNC, SYNC_MODULE_OPTION_CATEGORY_SYNC);
                 throw new IllegalArgumentException(errorMessage);
         }
