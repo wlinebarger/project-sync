@@ -87,7 +87,7 @@ public class CliRunner {
     }
 
     private void processCliArguments() {
-        final Option[] options = commandLine.getOptions();
+        final Option[] options = getCommandLine().getOptions();
         if (options.length == 0) {
             handleIllegalArgumentException("Please pass at least 1 option to the CLI.");
         } else {
@@ -123,7 +123,7 @@ public class CliRunner {
 
     private void printHelpToStdOut() {
         final HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp(getApplicationName(), options);
+        formatter.printHelp(getApplicationName(), getOptions());
     }
 
     private static String getApplicationName() {
@@ -139,5 +139,13 @@ public class CliRunner {
     private static String getApplicationVersion() {
         final String implementationVersion = Main.class.getPackage().getImplementationVersion();
         return isBlank(implementationVersion) ? APPLICATION_DEFAULT_VERSION : implementationVersion;
+    }
+
+    Options getOptions() {
+        return options;
+    }
+
+    CommandLine getCommandLine() {
+        return commandLine;
     }
 }
