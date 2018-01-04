@@ -15,20 +15,27 @@ import javax.annotation.Nonnull;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-public final class CliRunner {
-    public static final String SYNC_MODULE_OPTION_SHORT = "s";
-    private static final String HELP_OPTION_SHORT = "h";
-    private static final String VERSION_OPTION_SHORT = "v";
+public class CliRunner {
+    static final String SYNC_MODULE_OPTION_SHORT = "s";
+    static final String HELP_OPTION_SHORT = "h";
+    static final String VERSION_OPTION_SHORT = "v";
 
-    public static final String SYNC_MODULE_OPTION_LONG = "sync";
-    public static final String SYNC_MODULE_OPTION_PRODUCT_SYNC = "products";
-    public static final String SYNC_MODULE_OPTION_CATEGORY_SYNC = "categories";
+    static final String SYNC_MODULE_OPTION_LONG = "sync";
+    static final String HELP_OPTION_LONG = "help";
+    static final String VERSION_OPTION_LONG = "version";
 
-    private static final String APPLICATION_DEFAULT_NAME = "COEUR-SYNC";
-    private static final String APPLICATION_DEFAULT_VERSION = "1.0-dev";
+    static final String SYNC_MODULE_OPTION_PRODUCT_SYNC = "products";
+    static final String SYNC_MODULE_OPTION_CATEGORY_SYNC = "categories";
 
+    static final String SYNC_MODULE_OPTION_DESCRIPTION = format("Choose which sync module to run. \"%s\" runs product "
+            + "sync. \"%s\" runs category sync.", SYNC_MODULE_OPTION_PRODUCT_SYNC, SYNC_MODULE_OPTION_CATEGORY_SYNC);
+    static final String HELP_OPTION_DESCRIPTION = "Print help information to System.out.";
+    static final String VERSION_OPTION_DESCRIPTION = "Print the version of the application.";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
+    static final String APPLICATION_DEFAULT_NAME = "COEUR-SYNC";
+    static final String APPLICATION_DEFAULT_VERSION = "1.0-dev";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CliRunner.class);
 
     private Options options;
     private CommandLine commandLine;
@@ -56,22 +63,22 @@ public final class CliRunner {
 
     private static Options getCliOptions() {
         final Options options = new Options();
+
         final Option syncOption = Option.builder(SYNC_MODULE_OPTION_SHORT)
                                         .longOpt(SYNC_MODULE_OPTION_LONG)
-                                        .desc(format("Choose which sync module to run. \"%s\" runs product sync. \"%s\""
-                                                + " runs category sync.", SYNC_MODULE_OPTION_PRODUCT_SYNC,
-                                            SYNC_MODULE_OPTION_CATEGORY_SYNC))
+                                        .desc(SYNC_MODULE_OPTION_DESCRIPTION)
                                         .hasArg()
                                         .build();
 
+
         final Option helpOption = Option.builder(HELP_OPTION_SHORT)
-                                        .longOpt("help")
-                                        .desc("Print help information to System.out.")
+                                        .longOpt(HELP_OPTION_LONG)
+                                        .desc(HELP_OPTION_DESCRIPTION)
                                         .build();
 
         final Option versionOption = Option.builder(VERSION_OPTION_SHORT)
-                                           .longOpt("version")
-                                           .desc("Print the version of the application.")
+                                           .longOpt(VERSION_OPTION_LONG)
+                                           .desc(VERSION_OPTION_DESCRIPTION)
                                            .build();
         options.addOption(syncOption);
         options.addOption(helpOption);
