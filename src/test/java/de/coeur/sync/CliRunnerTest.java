@@ -98,13 +98,6 @@ public class CliRunnerTest {
         assertSingleLoggingEvent(Level.INFO, APPLICATION_DEFAULT_VERSION, null);
     }
 
-    @Test
-    public void run_WithVersionAsLongArgument_ShouldLogApplicationVersionAsInfo() {
-        new CliRunner().run(new String[]{"--version"});
-
-        assertSingleLoggingEvent(Level.INFO, APPLICATION_DEFAULT_VERSION, null);
-    }
-
     private void assertSingleLoggingEvent(@Nonnull final Level logLevel,
                                           @Nonnull final String logMessage,
                                           @Nullable final Throwable logThrowable) {
@@ -114,6 +107,13 @@ public class CliRunnerTest {
         assertThat(loggingEvent.getLevel()).isEqualTo(logLevel);
         assertThat(loggingEvent.getMessage()).contains(logMessage);
         assertThat(loggingEvent.getThrowable().orNull()).isEqualTo(logThrowable);
+    }
+
+    @Test
+    public void run_WithVersionAsLongArgument_ShouldLogApplicationVersionAsInfo() {
+        new CliRunner().run(new String[]{"--version"});
+
+        assertSingleLoggingEvent(Level.INFO, APPLICATION_DEFAULT_VERSION, null);
     }
 
     @Test
