@@ -41,19 +41,12 @@ public class CliRunner {
     private CommandLine commandLine;
 
 
-    static void of(@Nonnull final String[] arguments) {
-        new CliRunner(arguments);
+    static CliRunner of() {
+        return new CliRunner();
     }
 
-    private CliRunner(@Nonnull final String[] arguments) {
-        final CommandLineParser parser = new DefaultParser();
-        options = getCliOptions();
-        try {
-            commandLine = parser.parse(options, arguments);
-            processCliArguments();
-        } catch (final ParseException | IllegalArgumentException exception) {
-            handleIllegalArgumentException(format("Parse error:%n%s", exception.getMessage()));
-        }
+    private CliRunner() {
+        options = buildCliOptions();
     }
 
     private void handleIllegalArgumentException(@Nonnull final String errorMessage) {
@@ -61,7 +54,7 @@ public class CliRunner {
         printHelpToStdOut();
     }
 
-    private static Options getCliOptions() {
+    static Options buildCliOptions() {
         final Options options = new Options();
 
         final Option syncOption = Option.builder(SYNC_MODULE_OPTION_SHORT)
@@ -86,7 +79,15 @@ public class CliRunner {
         return options;
     }
 
-
+    void run(@Nonnull final String[] arguments) {
+        final CommandLineParser parser = new DefaultParser();
+        try {
+            commandLine = parser.parse(getOptions(), arguments);
+            processCliArguments();
+        } catch (final ParseException | IllegalArgumentException exception) {
+            handleIllegalArgumentException(format("Parse error:%n%s", exception.getMessage()));
+        }
+    }
 
     private void processCliArguments() {
         final Option[] options = commandLine.getOptions();
