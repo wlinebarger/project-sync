@@ -1,6 +1,7 @@
 package de.coeur.sync;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import uk.org.lidalia.slf4jext.Level;
@@ -38,15 +39,22 @@ import static org.mockito.Mockito.when;
 public class CliRunnerTest {
     private static final TestLogger testLogger = TestLoggerFactory.getTestLogger(CliRunner.class);
     private static ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    private static PrintStream originalSystemOut;
 
     @BeforeClass
-    public static void setupClass() throws UnsupportedEncodingException {
+    public static void setupSuite() throws UnsupportedEncodingException {
         final PrintStream printStream = new PrintStream(outputStream, false, "UTF-8");
+        originalSystemOut = System.out;
         System.setOut(printStream);
     }
 
+    @AfterClass
+    public static void tearDownSuite() throws UnsupportedEncodingException {
+        System.setOut(originalSystemOut);
+    }
+
     @After
-    public void afterTest() {
+    public void tearDownTest() {
         testLogger.clearAll();
     }
 
