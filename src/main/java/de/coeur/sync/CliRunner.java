@@ -101,7 +101,7 @@ public class CliRunner {
                 default:
                     // Unreachable code since this case is already handled by parser.parse(options, arguments);
                     // in the constructor.
-                    handleIllegalArgumentException(format("Unrecognized option: -%s", optionName));
+                    throw new IllegalStateException(format("Unrecognized option: -%s", optionName));
             }
         }
     }
