@@ -51,7 +51,7 @@ public class CliRunnerTest {
     }
 
     @Test
-    public void of_WithEmptyArgumentList_ShouldLogErrorAndPrintHelp() throws UnsupportedEncodingException {
+    public void run_WithEmptyArgumentList_ShouldLogErrorAndPrintHelp() throws UnsupportedEncodingException {
         CliRunner.of()
                  .run(new String[]{});
         // Assert error log
@@ -68,7 +68,7 @@ public class CliRunnerTest {
     }
 
     @Test
-    public void of_WithHelpAsLongArgument_ShouldPrintUsageHelpToSystemOut() throws UnsupportedEncodingException {
+    public void run_WithHelpAsLongArgument_ShouldPrintUsageHelpToSystemOut() throws UnsupportedEncodingException {
         CliRunner.of()
                  .run(new String[]{"-help"});
 
@@ -77,7 +77,7 @@ public class CliRunnerTest {
     }
 
     @Test
-    public void of_WithHelpAsShortArgument_ShouldPrintUsageHelpToSystemOut() throws UnsupportedEncodingException {
+    public void run_WithHelpAsShortArgument_ShouldPrintUsageHelpToSystemOut() throws UnsupportedEncodingException {
         CliRunner.of()
                  .run(new String[]{"-h"});
 
@@ -86,14 +86,14 @@ public class CliRunnerTest {
     }
 
     @Test
-    public void of_WithVersionAsShortArgument_ShouldLogApplicationVersionAsInfo() {
+    public void run_WithVersionAsShortArgument_ShouldLogApplicationVersionAsInfo() {
         CliRunner.of()
                  .run(new String[]{"-v"});
         assertSingleLoggingEvent(Level.INFO, APPLICATION_DEFAULT_VERSION, null);
     }
 
     @Test
-    public void of_WithVersionAsLongArgument_ShouldLogApplicationVersionAsInfo() {
+    public void run_WithVersionAsLongArgument_ShouldLogApplicationVersionAsInfo() {
         CliRunner.of()
                  .run(new String[]{"--version"});
         assertSingleLoggingEvent(Level.INFO, APPLICATION_DEFAULT_VERSION, null);
@@ -111,7 +111,7 @@ public class CliRunnerTest {
     }
 
     @Test
-    public void of_WithSyncAsArgumentWithNoArgs_ShouldLogErrorAndPrintHelpUsageToSystemOut()
+    public void run_WithSyncAsArgumentWithNoArgs_ShouldLogErrorAndPrintHelpUsageToSystemOut()
         throws UnsupportedEncodingException {
         CliRunner.of()
                  .run(new String[]{"-s"});
@@ -120,7 +120,7 @@ public class CliRunnerTest {
     }
 
     @Test
-    public void of_WithSyncAsArgumentWithIllegalArgs_ShouldLogErrorAndPrintHelpUsageToSystemOut()
+    public void run_WithSyncAsArgumentWithIllegalArgs_ShouldLogErrorAndPrintHelpUsageToSystemOut()
         throws UnsupportedEncodingException {
         final String illegalArg = "illegal";
         CliRunner.of()
@@ -131,7 +131,7 @@ public class CliRunnerTest {
     }
 
     @Test
-    public void of_WithSyncAsLongArgument_ShouldProcessSyncOption() {
+    public void run_WithSyncAsLongArgument_ShouldProcessSyncOption() {
         final CliRunner cliRunner = mock(CliRunner.class);
 
         final String mockLog = "sync done.";
@@ -150,7 +150,7 @@ public class CliRunnerTest {
     }
 
     @Test
-    public void of_WithSyncAsShortArgument_ShouldProcessSyncOption() {
+    public void run_WithSyncAsShortArgument_ShouldProcessSyncOption() {
         final CliRunner cliRunner = mock(CliRunner.class);
 
         final String mockLog = "sync done.";
@@ -169,7 +169,7 @@ public class CliRunnerTest {
     }
 
     @Test
-    public void of_WithUnknownArgument_ShouldPrintErrorLogAndHelpUsage() throws UnsupportedEncodingException {
+    public void run_WithUnknownArgument_ShouldPrintErrorLogAndHelpUsage() throws UnsupportedEncodingException {
         CliRunner.of()
                  .run(new String[]{"-u"});
 
@@ -179,7 +179,7 @@ public class CliRunnerTest {
     }
 
     @Test
-    public void of_WithHelpAsArgument_ShouldPrintThreeOptionsWithDescriptionsToSystemOut()
+    public void run_WithHelpAsArgument_ShouldPrintThreeOptionsWithDescriptionsToSystemOut()
         throws UnsupportedEncodingException {
         CliRunner.of()
                  .run(new String[]{"-h"});
