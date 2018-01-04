@@ -40,7 +40,6 @@ public class CliRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(CliRunner.class);
 
     private Options options;
-    private CommandLine commandLine;
 
     public CliRunner() {
         options = buildCliOptions();
@@ -74,15 +73,15 @@ public class CliRunner {
     void run(@Nonnull final String[] arguments) {
         final CommandLineParser parser = new DefaultParser();
         try {
-            commandLine = parser.parse(getOptions(), arguments);
-            processCliArguments();
+            final CommandLine commandLine = parser.parse(getOptions(), arguments);
+            processCliArguments(commandLine);
         } catch (final ParseException | IllegalArgumentException exception) {
             handleIllegalArgumentException(format("Parse error:%n%s", exception.getMessage()));
         }
     }
 
-    private void processCliArguments() {
-        final Option[] options = getCommandLine().getOptions();
+    private void processCliArguments(@Nonnull final CommandLine commandLine) {
+        final Option[] options = commandLine.getOptions();
         if (options.length == 0) {
             handleIllegalArgumentException("Please pass at least 1 option to the CLI.");
         } else {
@@ -90,7 +89,7 @@ public class CliRunner {
             final String optionName = option.getOpt();
             switch (optionName) {
                 case SYNC_MODULE_OPTION_SHORT :
-                    processSyncOption().toCompletableFuture().join();
+                    processSyncOption(commandLine).toCompletableFuture().join();
                     break;
                 case HELP_OPTION_SHORT :
                     printHelpToStdOut();
@@ -111,8 +110,8 @@ public class CliRunner {
         printHelpToStdOut();
     }
 
-    CompletionStage processSyncOption() {
-        final String syncOptionValue = getCommandLine().getOptionValue(SYNC_MODULE_OPTION_SHORT);
+    CompletionStage processSyncOption(@Nonnull final CommandLine commandLine) {
+        final String syncOptionValue = commandLine.getOptionValue(SYNC_MODULE_OPTION_SHORT);
         return SyncerFactory.getSyncer(syncOptionValue).sync();
     }
 
@@ -138,9 +137,5 @@ public class CliRunner {
 
     Options getOptions() {
         return options;
-    }
-
-    CommandLine getCommandLine() {
-        return commandLine;
     }
 }

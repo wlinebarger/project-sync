@@ -146,9 +146,8 @@ public class CliRunnerTest {
 
 
         when(cliRunner.getOptions()).thenReturn(buildCliOptions());
-        when(cliRunner.getCommandLine()).thenCallRealMethod();
         doCallRealMethod().when(cliRunner).run(any());
-        when(cliRunner.processSyncOption()).thenReturn(syncFutureResult);
+        when(cliRunner.processSyncOption(any())).thenReturn(syncFutureResult);
 
         cliRunner.run(new String[]{"--sync", "arg"});
 
@@ -165,9 +164,8 @@ public class CliRunnerTest {
 
 
         when(cliRunner.getOptions()).thenReturn(buildCliOptions());
-        when(cliRunner.getCommandLine()).thenCallRealMethod();
         doCallRealMethod().when(cliRunner).run(any());
-        when(cliRunner.processSyncOption()).thenReturn(syncFutureResult);
+        when(cliRunner.processSyncOption(any())).thenReturn(syncFutureResult);
 
         cliRunner.run(new String[]{"-s", "arg"});
 
