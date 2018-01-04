@@ -91,7 +91,7 @@ existing commercetools project.
     -e COEUR_TARGET_PROJECT_KEY='<ctp-target-project-key>' \
     -e COEUR_TARGET_CLIENT_ID='<ctp-target-client-id>' \
     -e COEUR_TARGET_CLIENT_SECRET='<ctp-target-client-secret>' \
-    -name <worker-name>  ctpcoeur/category-sync:<current-version>
+    -name <worker-name>  ctpcoeur/category-sync:<current-version> java -jar /home/coeur-sync.jar -s <sync-option>
    ```
  - For staging deployment, use the docker image with the tag `latest`, which is automatically built on travis after merging to master
  branch.
