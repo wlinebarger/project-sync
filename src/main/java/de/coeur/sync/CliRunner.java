@@ -42,12 +42,7 @@ public class CliRunner {
     private Options options;
     private CommandLine commandLine;
 
-
-    static CliRunner of() {
-        return new CliRunner();
-    }
-
-    private CliRunner() {
+    public CliRunner() {
         options = buildCliOptions();
     }
 

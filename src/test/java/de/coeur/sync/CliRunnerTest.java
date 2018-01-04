@@ -52,8 +52,8 @@ public class CliRunnerTest {
 
     @Test
     public void run_WithEmptyArgumentList_ShouldLogErrorAndPrintHelp() throws UnsupportedEncodingException {
-        CliRunner.of()
-                 .run(new String[]{});
+        new CliRunner().run(new String[]{});
+
         // Assert error log
         assertSingleLoggingEvent(Level.ERROR, "Please pass at least 1 option to the CLI.", null);
         assertOutputStreamContainsHelpUsageWithSpecifiedCliOptions();
@@ -69,8 +69,7 @@ public class CliRunnerTest {
 
     @Test
     public void run_WithHelpAsLongArgument_ShouldPrintUsageHelpToSystemOut() throws UnsupportedEncodingException {
-        CliRunner.of()
-                 .run(new String[]{"-help"});
+        new CliRunner().run(new String[]{"-help"});
 
         assertThat(testLogger.getAllLoggingEvents()).isEmpty();
         assertOutputStreamContainsHelpUsageWithSpecifiedCliOptions();
@@ -78,8 +77,7 @@ public class CliRunnerTest {
 
     @Test
     public void run_WithHelpAsShortArgument_ShouldPrintUsageHelpToSystemOut() throws UnsupportedEncodingException {
-        CliRunner.of()
-                 .run(new String[]{"-h"});
+        new CliRunner().run(new String[]{"-h"});
 
         assertThat(testLogger.getAllLoggingEvents()).isEmpty();
         assertOutputStreamContainsHelpUsageWithSpecifiedCliOptions();
@@ -87,15 +85,15 @@ public class CliRunnerTest {
 
     @Test
     public void run_WithVersionAsShortArgument_ShouldLogApplicationVersionAsInfo() {
-        CliRunner.of()
-                 .run(new String[]{"-v"});
+        new CliRunner().run(new String[]{"-v"});
+
         assertSingleLoggingEvent(Level.INFO, APPLICATION_DEFAULT_VERSION, null);
     }
 
     @Test
     public void run_WithVersionAsLongArgument_ShouldLogApplicationVersionAsInfo() {
-        CliRunner.of()
-                 .run(new String[]{"--version"});
+        new CliRunner().run(new String[]{"--version"});
+
         assertSingleLoggingEvent(Level.INFO, APPLICATION_DEFAULT_VERSION, null);
     }
 
@@ -113,8 +111,8 @@ public class CliRunnerTest {
     @Test
     public void run_WithSyncAsArgumentWithNoArgs_ShouldLogErrorAndPrintHelpUsageToSystemOut()
         throws UnsupportedEncodingException {
-        CliRunner.of()
-                 .run(new String[]{"-s"});
+        new CliRunner().run(new String[]{"-s"});
+
         assertSingleLoggingEvent(Level.ERROR, "Parse error:\nMissing argument for option: s", null);
         assertOutputStreamContainsHelpUsageWithSpecifiedCliOptions();
     }
@@ -123,8 +121,8 @@ public class CliRunnerTest {
     public void run_WithSyncAsArgumentWithIllegalArgs_ShouldLogErrorAndPrintHelpUsageToSystemOut()
         throws UnsupportedEncodingException {
         final String illegalArg = "illegal";
-        CliRunner.of()
-                 .run(new String[]{"-s", illegalArg});
+        new CliRunner().run(new String[]{"-s", illegalArg});
+        
         assertSingleLoggingEvent(Level.ERROR, format("Parse error:%nUnknown argument \"%s\" supplied to \"-%s\" or"
                 + " \"--%s\" option!", illegalArg, SYNC_MODULE_OPTION_SHORT, SYNC_MODULE_OPTION_LONG), null);
         assertOutputStreamContainsHelpUsageWithSpecifiedCliOptions();
@@ -170,8 +168,7 @@ public class CliRunnerTest {
 
     @Test
     public void run_WithUnknownArgument_ShouldPrintErrorLogAndHelpUsage() throws UnsupportedEncodingException {
-        CliRunner.of()
-                 .run(new String[]{"-u"});
+        new CliRunner().run(new String[]{"-u"});
 
         // Assert error log
         assertSingleLoggingEvent(Level.ERROR, "Parse error:\nUnrecognized option: -u", null);
@@ -181,8 +178,7 @@ public class CliRunnerTest {
     @Test
     public void run_WithHelpAsArgument_ShouldPrintThreeOptionsWithDescriptionsToSystemOut()
         throws UnsupportedEncodingException {
-        CliRunner.of()
-                 .run(new String[]{"-h"});
+        new CliRunner().run(new String[]{"-h"});
 
         assertThat(testLogger.getAllLoggingEvents()).isEmpty();
 
