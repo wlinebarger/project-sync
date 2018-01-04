@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 
+import java.util.concurrent.CompletionStage;
+
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -47,11 +49,6 @@ public class CliRunner {
 
     private CliRunner() {
         options = buildCliOptions();
-    }
-
-    private void handleIllegalArgumentException(@Nonnull final String errorMessage) {
-        LOGGER.error(errorMessage);
-        printHelpToStdOut();
     }
 
     static Options buildCliOptions() {
@@ -98,7 +95,7 @@ public class CliRunner {
             final String optionName = option.getOpt();
             switch (optionName) {
                 case SYNC_MODULE_OPTION_SHORT :
-                    processSyncOption();
+                    processSyncOption().toCompletableFuture().join();
                     break;
                 case HELP_OPTION_SHORT :
                     printHelpToStdOut();
@@ -112,13 +109,15 @@ public class CliRunner {
         }
     }
 
-    private void processSyncOption() {
-        final String syncOptionValue = commandLine.getOptionValue(SYNC_MODULE_OPTION_SHORT);
-        SyncerFactory.getSyncer(syncOptionValue)
-                     .sync().toCompletableFuture().join();
+    private void handleIllegalArgumentException(@Nonnull final String errorMessage) {
+        LOGGER.error(errorMessage);
+        printHelpToStdOut();
     }
 
-
+    CompletionStage processSyncOption() {
+        final String syncOptionValue = getCommandLine().getOptionValue(SYNC_MODULE_OPTION_SHORT);
+        return SyncerFactory.getSyncer(syncOptionValue).sync();
+    }
 
     private void printHelpToStdOut() {
         final HelpFormatter formatter = new HelpFormatter();
