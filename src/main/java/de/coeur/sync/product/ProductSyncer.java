@@ -59,8 +59,8 @@ public class ProductSyncer extends Syncer<Product, ProductDraft,
      */
     static List<UpdateAction<Product>> appendPublishIfPublished(@Nonnull final List<UpdateAction<Product>>
                                                                                        updateActions,
-                                                                        @Nonnull final ProductDraft newProductDraft,
-                                                                        @Nonnull final Product oldProduct) {
+                                                                @Nonnull final ProductDraft newProductDraft,
+                                                                @Nonnull final Product oldProduct) {
         if (!updateActions.isEmpty() && oldProduct.getMasterData().isPublished()) {
             updateActions.add(Publish.of());
         }
