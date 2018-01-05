@@ -80,4 +80,41 @@ public class ProductSyncerTest {
         assertThat(newUpdateActions).hasSize(1);
         assertThat(newUpdateActions.get(0)).isEqualTo(ChangeName.of(ofEnglish("foo")));
     }
+
+    @Test
+    public void appendPublishIfPublished_WithPublishedProductAndOnePublish_ShouldNotAppendPublish() {
+        final ProductCatalogData masterData = mock(ProductCatalogData.class);
+        when(masterData.isPublished()).thenReturn(true);
+
+        final Product product = mock(Product.class);
+        when(product.getMasterData()).thenReturn(masterData);
+
+        final ArrayList<UpdateAction<Product>> updateActions = new ArrayList<>();
+        updateActions.add(Publish.of());
+
+        final List<UpdateAction<Product>> newUpdateActions = ProductSyncer
+            .appendPublishIfPublished(updateActions, mock(ProductDraft.class), product);
+
+        assertThat(newUpdateActions).hasSize(1);
+        assertThat(newUpdateActions.get(0)).isEqualTo(Publish.of());
+    }
+
+
+    @Test
+    public void appendPublishIfPublished_WithUnPublishedProductAndOnePublishAction_ShouldNotAppendPublish() {
+        final ProductCatalogData masterData = mock(ProductCatalogData.class);
+        when(masterData.isPublished()).thenReturn(false);
+
+        final Product product = mock(Product.class);
+        when(product.getMasterData()).thenReturn(masterData);
+
+        final ArrayList<UpdateAction<Product>> updateActions = new ArrayList<>();
+        updateActions.add(Publish.of());
+
+        final List<UpdateAction<Product>> newUpdateActions = ProductSyncer
+            .appendPublishIfPublished(updateActions, mock(ProductDraft.class), product);
+
+        assertThat(newUpdateActions).hasSize(1);
+        assertThat(newUpdateActions.get(0)).isEqualTo(Publish.of());
+    }
 }

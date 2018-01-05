@@ -48,8 +48,8 @@ public class ProductSyncer extends Syncer<Product, ProductDraft,
     /**
      * Used for the beforeUpdateCallback of the sync. When an {@code oldProduct} is updated, this method will add
      * a {@link Publish} update action to the list of update actions, only if the {@code oldProduct} has the published
-     * field set to true and has new update actions. Which means that it will publish the staged changes caused by the
-     * {@code updateActions} if it was already published.
+     * field set to true and has new update actions (not containing a publish action). Which means that it will publish
+     * the staged changes caused by the {@code updateActions} if it was already published.
      *
      * @param updateActions update actions needed to sync {@code newProductDraft} to {@code oldProduct}.
      * @param newProductDraft the product draft with the changes.
@@ -61,7 +61,9 @@ public class ProductSyncer extends Syncer<Product, ProductDraft,
                                                                                        updateActions,
                                                                 @Nonnull final ProductDraft newProductDraft,
                                                                 @Nonnull final Product oldProduct) {
-        if (!updateActions.isEmpty() && oldProduct.getMasterData().isPublished()) {
+        if (!updateActions.isEmpty()
+            && !updateActions.contains(Publish.of())
+            && oldProduct.getMasterData().isPublished()) {
             updateActions.add(Publish.of());
         }
         return updateActions;
