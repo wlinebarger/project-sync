@@ -1,5 +1,4 @@
 group = 'de.coeur'
-version = '1.0-dev'
+version = '2.0.1'
 mainClassName = 'de.coeur.sync.Main'
-description = "Module to synchronise staging commercetools project data of coeur to production" +
-        "existing commercetools project."
+description = "Module to synchronise staging commercetools project data of coeur to production project."
