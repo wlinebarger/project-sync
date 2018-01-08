@@ -91,8 +91,12 @@ existing commercetools project.
     -e COEUR_TARGET_PROJECT_KEY='<ctp-target-project-key>' \
     -e COEUR_TARGET_CLIENT_ID='<ctp-target-client-id>' \
     -e COEUR_TARGET_CLIENT_SECRET='<ctp-target-client-secret>' \
-    -name <worker-name>  ctpcoeur/category-sync:<current-version> java -jar /home/coeur-sync.jar -s <sync-option>
+    -name <worker-name>  ctpcoeur/coeur-sync:<current-version> java -Xmx400m -jar /home/coeur-sync.jar -s <sync-option>
    ```
+   
+ - **NOTE** The `-Xmx400m` java option is important to limit the JVM heap limit to 400m for the application, since the
+  worker limit on iron.io is 500m.  
+   
  - For staging deployment, use the docker image with the tag `latest`, which is automatically built on travis after merging to master
  branch.
  - For production deployment, use the docker image with the tag `production`. 
