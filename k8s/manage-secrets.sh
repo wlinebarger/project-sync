@@ -6,8 +6,9 @@ KEY=coeur-sync
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 VALUES_DIR="${SCRIPT_DIR}/helm/values"
-PLAIN_FILE="${VALUES_DIR}/${PROJECT}/secrets.yaml"
-CIPHER_FILE="${VALUES_DIR}/${PROJECT}/secrets.enc"
+PROJECT_VALUES_DIR="${VALUES_DIR}/${PROJECT}"
+PLAIN_FILE="${PROJECT_VALUES_DIR}/secrets.yaml"
+CIPHER_FILE="${PROJECT_VALUES_DIR}/secrets.enc"
 
 usage () {
   echo "Error encrypt/decrypt secrets file script call. Usage:"
