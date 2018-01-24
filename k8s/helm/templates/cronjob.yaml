@@ -1,0 +1,73 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+    app: {{ template "fullname" . }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    component: product-publish-state-import
+spec:
+  schedule: {{ .Values.restartPolicy | quote }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+        release: "{{ .Release.Name }}"
+        component: netscanner
+    spec:
+      restartPolicy: {{ .Values.restartPolicy }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        containers:
+        - name: product-publish-state-import
+          image: eu.gcr.io/professionalserviceslabs/product-publish-state-import:latest
+          args:
+          - bin/product-publish-state-import
+          - --projectKey
+          - {{ .Values.ctpProjectName }}
+          - --logLevel
+          - info
+          env:
+          - name: LOGENTRIES_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}
+                key: logentries_token
+          - name: SPHERE_PROJECT_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}
+                key: ctp_project_key
+          - name: SPHERE_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}
+                key: ctp_client_id
+          - name: SPHERE_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}
+                key: ctp_client_secret
+          securityContext:
+            capabilities:
+              drop:
+              - SETPCAP
+              - MKNOD
+              - AUDIT_WRITE
+              - CHOWN
+              - NET_RAW
+              - DAC_OVERRIDE
+              - FOWNER
+              - FSETID
+              - KILL
+              - SETGID
+              - SETUID
+              - NET_BIND_SERVICE
+              - SYS_CHROOT
+              - SETFCAP
+            readOnlyRootFilesystem: true
+          resources:
+  {{ toYaml .Values.resources | indent 10 }}

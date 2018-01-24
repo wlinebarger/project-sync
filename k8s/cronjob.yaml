@@ -1,0 +1,41 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: coeur-sync
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: coeur-sync
+            image: eu.gcr.io/professionalserviceslabs/product-publish-state-import:latest
+            args:
+            - bin/product-publish-state-import
+            - --projectKey
+            - carharrt-demo-83
+            - --logLevel
+            - info
+            env:
+            - name: LOGENTRIES_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: logentries_token
+            - name: SPHERE_PROJECT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: project_key
+            - name: SPHERE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: client_id    
+            - name: SPHERE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: client_secret
+          restartPolicy: Never

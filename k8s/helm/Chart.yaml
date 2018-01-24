@@ -1,0 +1,4 @@
+apiVersion: v1
+description: Port scanner to find open ports
+name: netscanner
+version: 0.1.0

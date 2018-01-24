@@ -1,0 +1,26 @@
+## restart policy for all containers
+##
+restartPolicy: Never
+
+image:
+  repository: eu.gcr.io/professionalserviceslabs/product-publish-state-import:latest
+  tag: latest
+  pullPolicy: IfNotPresent
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  requests:
+    cpu: 50m
+    memory: 256Mi
+  limits:
+    cpu: 150m
+    memory: 512Mi
+
+schedule: "*/1 * * * *"
+
+ctpProjectName: carharrt-demo-83
+ctpClientId: dummyClientId
+ctpClientSecret: dummyClientSecret
+logentriesToken: dummyLogentriesToken
