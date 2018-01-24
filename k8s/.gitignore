@@ -1,3 +1,5 @@
 secrets.*
 
+!secrets.enc
+
 !helm/templates/secrets.yaml
