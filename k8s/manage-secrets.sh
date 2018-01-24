@@ -3,6 +3,7 @@
 PROJECT=professionalserviceslabs
 KEYRING=CDL
 KEY=coeur-sync
+
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 VALUES_DIR="${SCRIPT_DIR}/helm/values"
 PLAIN_FILE="${VALUES_DIR}/${PROJECT}/secrets.yaml"
