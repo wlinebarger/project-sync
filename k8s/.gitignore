@@ -1,0 +1,3 @@
+secrets.*
+
+!helm/templates/secrets.yaml
