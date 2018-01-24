@@ -1,10 +1,10 @@
 ## restart policy for all containers
 ##
 restartPolicy: Never
-
 image:
-  repository: eu.gcr.io/professionalserviceslabs/product-publish-state-import:latest
-  tag: latest
+  name: coeur-sync
+  repository: eu.gcr.io/professionalserviceslabs/coeur-sync
+  tag: 2.0.1
   pullPolicy: IfNotPresent
 
 ## Configure resource requests and limits
@@ -20,7 +20,7 @@ resources:
 
 schedule: "*/1 * * * *"
 
-ctpProjectName: carharrt-demo-83
-ctpClientId: dummyClientId
-ctpClientSecret: dummyClientSecret
-logentriesToken: dummyLogentriesToken
+sourceCtpProjectKey: targetProject #TODO: SHOULD CHANGE
+targetCtpProjectKey: sourceProject #TODO: SHOULD CHANGE
+
+

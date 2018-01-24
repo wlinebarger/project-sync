@@ -7,9 +7,9 @@ metadata:
     app: {{ template "fullname" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-    component: product-publish-state-import
+    component: {{ .Values.image.name }}
 spec:
-  schedule: {{ .Values.restartPolicy | quote }}
+  schedule: {{ .Values.schedule | quote }}
   template:
     metadata:
       labels:
@@ -22,35 +22,52 @@ spec:
         runAsNonRoot: true
         runAsUser: 1000
         containers:
-        - name: product-publish-state-import
-          image: eu.gcr.io/professionalserviceslabs/product-publish-state-import:latest
-          args:
+        - name: {{ .Values.image.name }}
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: #TODO: CHANGE THE FOLLOWING ARGS
           - bin/product-publish-state-import
           - --projectKey
           - {{ .Values.ctpProjectName }}
           - --logLevel
           - info
           env:
-          - name: LOGENTRIES_TOKEN
+          - name: COEUR_SOURCE_PROJECT_KEY
             valueFrom:
               secretKeyRef:
                 name: {{ template "fullname" . }}
-                key: logentries_token
-          - name: SPHERE_PROJECT_KEY
+                key: source_project_key
+
+          - name: COEUR_SOURCE_CLIENT_ID
             valueFrom:
               secretKeyRef:
                 name: {{ template "fullname" . }}
-                key: ctp_project_key
-          - name: SPHERE_CLIENT_ID
+                key: source_client_id
+
+          - name: COEUR_SOURCE_CLIENT_SECRET
             valueFrom:
               secretKeyRef:
                 name: {{ template "fullname" . }}
-                key: ctp_client_id
-          - name: SPHERE_CLIENT_SECRET
+                key: source_client_secret
+          env:
+          - name: COEUR_TARGET_PROJECT_KEY
             valueFrom:
               secretKeyRef:
                 name: {{ template "fullname" . }}
-                key: ctp_client_secret
+                key: target_project_key
+
+          - name: COEUR_TARGET_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}
+                key: target_client_id
+
+          - name: COEUR_TARGET_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "fullname" . }}
+                key: target_client_secret
+
           securityContext:
             capabilities:
               drop:
