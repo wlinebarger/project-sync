@@ -7,84 +7,85 @@ metadata:
     app: {{ template "fullname" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-    component: {{ .Values.image.name }}
 spec:
   schedule: {{ .Values.schedule | quote }}
-  template:
-    metadata:
-      labels:
-        app: {{ template "fullname" . }}
-        release: "{{ .Release.Name }}"
-        component: netscanner
+  jobTemplate:
     spec:
-      restartPolicy: {{ .Values.restartPolicy }}
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        containers:
-        - name: {{ .Values.image.name }}
-          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args: #TODO: CHANGE THE FOLLOWING ARGS
-          - bin/product-publish-state-import
-          - --projectKey
-          - {{ .Values.ctpProjectName }}
-          - --logLevel
-          - info
-          env:
-          - name: COEUR_SOURCE_PROJECT_KEY
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "fullname" . }}
-                key: source_project_key
-
-          - name: COEUR_SOURCE_CLIENT_ID
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "fullname" . }}
-                key: source_client_id
-
-          - name: COEUR_SOURCE_CLIENT_SECRET
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "fullname" . }}
-                key: source_client_secret
-          env:
-          - name: COEUR_TARGET_PROJECT_KEY
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "fullname" . }}
-                key: target_project_key
-
-          - name: COEUR_TARGET_CLIENT_ID
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "fullname" . }}
-                key: target_client_id
-
-          - name: COEUR_TARGET_CLIENT_SECRET
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "fullname" . }}
-                key: target_client_secret
-
+      template:
+        metadata:
+          labels:
+            app: {{ template "fullname" . }}
+            release: "{{ .Release.Name }}"
+        spec:
+          restartPolicy: {{ .Values.restartPolicy }}
           securityContext:
-            capabilities:
-              drop:
-              - SETPCAP
-              - MKNOD
-              - AUDIT_WRITE
-              - CHOWN
-              - NET_RAW
-              - DAC_OVERRIDE
-              - FOWNER
-              - FSETID
-              - KILL
-              - SETGID
-              - SETUID
-              - NET_BIND_SERVICE
-              - SYS_CHROOT
-              - SETFCAP
-            readOnlyRootFilesystem: true
-          resources:
-  {{ toYaml .Values.resources | indent 10 }}
+            runAsNonRoot: true
+            runAsUser: 1000
+          containers:
+            - name: {{ .Values.image.name }}
+              image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              args:
+              - java
+              - -Xmx400m
+              - -jar
+              - /home/coeur-sync.jar
+              - -s
+              - products
+              env:
+              - name: COEUR_SOURCE_PROJECT_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ template "fullname" . }}
+                    key: source_ctp_project_key
+
+              - name: COEUR_SOURCE_CLIENT_ID
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ template "fullname" . }}
+                    key: source_ctp_client_id
+
+              - name: COEUR_SOURCE_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ template "fullname" . }}
+                    key: source_ctp_client_secret
+
+              - name: COEUR_TARGET_PROJECT_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ template "fullname" . }}
+                    key: target_ctp_project_key
+
+              - name: COEUR_TARGET_CLIENT_ID
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ template "fullname" . }}
+                    key: target_ctp_client_id
+
+              - name: COEUR_TARGET_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ template "fullname" . }}
+                    key: target_ctp_client_secret
+
+              securityContext:
+                capabilities:
+                  drop:
+                  - SETPCAP
+                  - MKNOD
+                  - AUDIT_WRITE
+                  - CHOWN
+                  - NET_RAW
+                  - DAC_OVERRIDE
+                  - FOWNER
+                  - FSETID
+                  - KILL
+                  - SETGID
+                  - SETUID
+                  - NET_BIND_SERVICE
+                  - SYS_CHROOT
+                  - SETFCAP
+                readOnlyRootFilesystem: true
+              resources:
+                {{ toYaml .Values.resources }}
