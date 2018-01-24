@@ -6,3 +6,5 @@
 # gradle specific
 .gradle/
 build/
+
+secrets.*
