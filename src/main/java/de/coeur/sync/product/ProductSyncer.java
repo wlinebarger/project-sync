@@ -9,6 +9,7 @@ import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.products.Product;
 import io.sphere.sdk.products.ProductDraft;
 import io.sphere.sdk.products.commands.updateactions.Publish;
+import io.sphere.sdk.products.commands.updateactions.Unpublish;
 import io.sphere.sdk.products.queries.ProductQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,9 +62,10 @@ public class ProductSyncer extends Syncer<Product, ProductDraft,
                                                                                        updateActions,
                                                                 @Nonnull final ProductDraft newProductDraft,
                                                                 @Nonnull final Product oldProduct) {
-        if (!updateActions.isEmpty()
-            && !updateActions.contains(Publish.of())
-            && oldProduct.getMasterData().isPublished()) {
+        if (!updateActions.isEmpty() // Only if there are new updates
+            && !updateActions.contains(Publish.of()) // and there is no Publish action already in those updates
+            && !updateActions.contains(Unpublish.of()) // and there is no unpublish action in those updates
+            && oldProduct.getMasterData().isPublished()) {// and the existing/old product is already published
             updateActions.add(Publish.of());
         }
         return updateActions;
