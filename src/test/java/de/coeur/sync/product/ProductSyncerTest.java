@@ -6,6 +6,7 @@ import io.sphere.sdk.products.ProductCatalogData;
 import io.sphere.sdk.products.ProductDraft;
 import io.sphere.sdk.products.commands.updateactions.ChangeName;
 import io.sphere.sdk.products.commands.updateactions.Publish;
+import io.sphere.sdk.products.commands.updateactions.Unpublish;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -99,7 +100,6 @@ public class ProductSyncerTest {
         assertThat(newUpdateActions.get(0)).isEqualTo(Publish.of());
     }
 
-
     @Test
     public void appendPublishIfPublished_WithUnPublishedProductAndOnePublishAction_ShouldNotAppendPublish() {
         final ProductCatalogData masterData = mock(ProductCatalogData.class);
@@ -116,5 +116,23 @@ public class ProductSyncerTest {
 
         assertThat(newUpdateActions).hasSize(1);
         assertThat(newUpdateActions.get(0)).isEqualTo(Publish.of());
+    }
+
+    @Test
+    public void appendPublishIfPublished_WithPublishedProductAndOneUnPublishAction_ShouldNotAppendPublish() {
+        final ProductCatalogData masterData = mock(ProductCatalogData.class);
+        when(masterData.isPublished()).thenReturn(true);
+
+        final Product product = mock(Product.class);
+        when(product.getMasterData()).thenReturn(masterData);
+
+        final ArrayList<UpdateAction<Product>> updateActions = new ArrayList<>();
+        updateActions.add(Unpublish.of());
+
+        final List<UpdateAction<Product>> newUpdateActions = ProductSyncer
+            .appendPublishIfPublished(updateActions, mock(ProductDraft.class), product);
+
+        assertThat(newUpdateActions).hasSize(1);
+        assertThat(newUpdateActions.get(0)).isEqualTo(Unpublish.of());
     }
 }
