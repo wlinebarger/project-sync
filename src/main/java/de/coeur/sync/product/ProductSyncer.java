@@ -58,18 +58,25 @@ public class ProductSyncer extends Syncer<Product, ProductDraft,
      * @return the same list of update actions with a publish update action added, if there are staged changes that
      *         should be published.
      */
-    static List<UpdateAction<Product>> appendPublishIfPublished(@Nonnull final List<UpdateAction<Product>>
-                                                                                       updateActions,
-                                                                @Nonnull final ProductDraft newProductDraft,
-                                                                @Nonnull final Product oldProduct) {
+    static List<UpdateAction<Product>> appendPublishIfPublished(
+        @Nonnull final List<UpdateAction<Product>> updateActions,
+        @Nonnull final ProductDraft newProductDraft,
+        @Nonnull final Product oldProduct) {
+
         final Publish publishAction = Publish.of();
+        final Unpublish unpublishAction = Unpublish.of();
 
-        if (!updateActions.isEmpty() // Only if there are new updates
-            && oldProduct.getMasterData().isPublished() // and the existing/old product is already published
-            && !updateActions.contains(publishAction) // and there is no Publish action already in those updates
-            && !updateActions.contains(Unpublish.of())) { // and there is no Unpublish action in those updates
+        // Only if there are new updates and the existing/old product is already published
+        if (!updateActions.isEmpty() && oldProduct.getMasterData().isPublished()) {
 
-            updateActions.add(publishAction);
+            // Only if there is no Publish and Unpublish action in those updates
+            if (updateActions.stream().noneMatch(action ->
+                publishAction.getAction().equals(action.getAction())
+                    || unpublishAction.getAction().equals(action.getAction()))) {
+
+                updateActions.add(publishAction);
+            }
+
         }
         return updateActions;
     }
