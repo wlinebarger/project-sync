@@ -62,11 +62,14 @@ public class ProductSyncer extends Syncer<Product, ProductDraft,
                                                                                        updateActions,
                                                                 @Nonnull final ProductDraft newProductDraft,
                                                                 @Nonnull final Product oldProduct) {
+        final Publish publishAction = Publish.of();
+
         if (!updateActions.isEmpty() // Only if there are new updates
-            && !updateActions.contains(Publish.of()) // and there is no Publish action already in those updates
+            && !updateActions.contains(publishAction) // and there is no Publish action already in those updates
             && !updateActions.contains(Unpublish.of()) // and there is no unpublish action in those updates
             && oldProduct.getMasterData().isPublished()) { // and the existing/old product is already published
-            updateActions.add(Publish.of());
+
+            updateActions.add(publishAction);
         }
         return updateActions;
     }
